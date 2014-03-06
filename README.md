@@ -1,4 +1,4 @@
 INF1771
 =======
 
-Artificial Intelligence course @ PUC-Rio
+Projects for the **Artificial Intelligence** course *@ PUC-Rio*
