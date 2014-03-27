@@ -18,7 +18,7 @@ int main(){
   dungeon1.Display(true);
   vector< Coord > solution = dungeon1.Solve(make_pair(0,0), make_pair(1,1));
 
-  LogSolution("../logs/dg1_log.txt", "Dungeon 1", solution);
+  LogSolution("../logs/dg1.log", "Dungeon 1", solution);
 
 
   return 0;
