@@ -29,13 +29,15 @@ string ReadFile(const char * fileName)
 }
 
 
-bool LogSolution(const char * fileName, vector< pair<int,int> > path)
+bool LogSolution(const char * fileName, string header,
+                 vector< pair<int,int> > path )
 {
   ofstream logFile (fileName);
 
   if(!logFile.is_open())
     return false;
 
+  logFile << header << endl;
   for (int i = 0; i < path.size(); ++i)
   {
     if(i > 0)

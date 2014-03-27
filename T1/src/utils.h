@@ -8,6 +8,6 @@ using namespace std;
 
 string ReadFile(const char *);
 
-bool LogSolution(const char * , vector< pair<int,int> > );
+bool LogSolution(const char * , string , vector< pair<int,int> > );
 
 #endif
