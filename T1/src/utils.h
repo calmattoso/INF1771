@@ -6,8 +6,25 @@
 
 using namespace std;
 
-string ReadFile(const char *);
+class Utils 
+{
+private:
+	
+	enum Directions {
+		UP    = 1,
+		RIGHT = 2,
+		DOWN  = 3,
+		LEFT  = 4
+	};
 
-bool LogSolution(const char * , string , vector< pair<int,int> > );
+
+	static string CoordsToDirections ( vector< pair<int,int> > path );
+
+public:
+
+	static string ReadFile ( const char * );
+
+	static bool   LogSolution ( const char * , string , vector< pair<int,int> > );
+};
 
 #endif

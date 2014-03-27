@@ -4,7 +4,31 @@
 #include <sstream>
 #include "utils.h"
 
-string ReadFile(const char * fileName)
+string Utils::CoordsToDirections ( vector< pair<int,int> > path )
+{
+  stringstream dirs;
+
+  for(int i = 0, len = path.size() - 1; i < len; i++  )
+  {
+    pair<int,int> diff = make_pair( 
+      path[i + 1].first  - path[i].first ,
+      path[i + 1].second - path[i].second
+    );
+    
+    if( diff.second == -1 )
+      dirs << UP;
+    else if( diff.second == 1 )
+      dirs << DOWN;
+    else if( diff.first == 1 )
+      dirs << RIGHT;
+    else
+      dirs << LEFT;
+  }
+
+  return dirs.str();
+}
+
+string Utils::ReadFile(const char * fileName)
 {
   string line, input = "";
   stringstream rem_ws; /* used to remove whitespaces */
@@ -29,22 +53,18 @@ string ReadFile(const char * fileName)
 }
 
 
-bool LogSolution(const char * fileName, string header,
-                 vector< pair<int,int> > path )
+bool Utils::LogSolution(const char * fileName, string header,
+                        vector< pair<int,int> > path )
 {
   ofstream logFile (fileName);
 
   if(!logFile.is_open())
     return false;
+  if( header != "" )
+    logFile << header << endl;
 
-  logFile << header << endl;
-  for (int i = 0; i < path.size(); ++i)
-  {
-    if(i > 0)
-      logFile << ";";
-
-    logFile << "(" << path[i].first << "," << path[i].second << ")";
-  }
+  /* first, convert to directions */
+  logFile << CoordsToDirections( path );
 
   logFile.close();
   return true;

@@ -1,7 +1,11 @@
 #include <iostream>
+#include <cmath>
+#include <set>
 #include "map.h"
 
 using namespace std;
+
+/* Public */
 
 Map::Map(string mapData, int length)
 {
@@ -67,6 +71,7 @@ void Map::Display(bool isDungeon)
         case Map::FOREST   : code = 'F'; break;
         case Map::MOUNTAIN : code = 'M'; break;
         case Map::WATER    : code = 'W'; break;
+        default            : code = '-';
       }
 
       if(isDungeon && code == 'G')      
@@ -80,17 +85,109 @@ void Map::Display(bool isDungeon)
   }
 }
 
-vector< Coord > Map::Solve(Coord start, Coord goal)
+State Map::Solve(Coord start, Coord goal)
 {
-  vector< Coord > path;
+  set< State > pq ; /* Priority queue */
+  vector<bool> visited( this->length * this->length + 1 , false ); /* Visited nodes are marked; w/ margin */
+  State solution;
 
-  path.push_back( make_pair(1,1) );
-  path.push_back( make_pair(1,2) );
-  path.push_back( make_pair(1,3) );
-  path.push_back( make_pair(1,4) );
-  path.push_back( make_pair(1,5) );
+  State initial = make_pair( make_pair(0,0) , Path( 1, start ) );
+  pq.insert(initial);
 
-  return path;
+  while( !pq.empty() )
+  {
+    /* Get the current path with least cost, and
+        remove it from our "heap" */
+    State top = *(pq.begin());
+    pq.erase( pq.begin() );
+    
+    /* Get the last visited node of the candidate path */
+    Coord last = *(top.second.rbegin());
+    
+    /* Identify possible new expansions*/
+    vector< Coord > candidates = ExpandFrontier( last );
+
+    //cout << "(" << last.first << "," << last.second << ") [" << top.first << "]" << endl;
+
+    for( int i = 0, len = candidates.size(); i < len ; i++)
+    {
+      int col  = candidates[i].first,
+          line = candidates[i].second,
+          idx  = ( line - 1 ) * (this->length) + col ;
+
+      /* Adding to the heap paths which do not take us back
+          to a previously seen node; if the goal state is reached,
+          exit the loop and return it */ 
+      if( !visited[ idx ] )
+      {
+        visited[idx] = true;
+
+        /* totalCost is an aggregate of: 
+            sum of hops cost + 
+            sum of manhattan distances
+           stepsCost is an aggregate of hops cost */
+        int totalCost = top.first.first + map[line][col] + 
+                ManhattanDistance( candidates[i] , goal ) ,
+            stepsCost = top.first.second + map[line][col];
+
+       // cout << "\t@(" << col << "," << line << ") cost: " << newCost << endl;
+
+        Path newPath(top.second.begin(), top.second.end());
+        newPath.push_back( candidates[i] );
+
+        State next( make_pair( totalCost , stepsCost ), newPath );
+        pq.insert( next );
+
+        /* check if we reached the goal */
+        if( candidates[i] == goal )
+        {
+          solution = next;
+          break;
+        }
+      }
+    }
+  } 
+
+  return solution;
 }
+
+
+/* Private Helpers */
+
+bool Map::fncomp (State lhs, State rhs) 
+{ 
+  return lhs.first < rhs.first ; 
+}
+
+int Map::ManhattanDistance( Coord from, Coord to )
+{
+  return abs( to.first - from.first ) + abs( to.second - from.second );
+}
+
+vector< Coord > Map::ExpandFrontier ( Coord pos ) 
+{
+  /* Right, Left, Down, Up */
+  Coord diffs[4] = {
+    Coord( 1 , 0 ) , Coord( -1 ,  0 ) ,
+    Coord( 0 , 1 ) , Coord(  0 , -1 )
+  };
+
+  vector< Coord > valid_neighs;
+
+  /* Get each possible neighbor, check if it's valid, return final list */
+  for(int i = 0; i < 4; i++)
+  {
+    Coord neighbor = make_pair( 
+      pos.first  + diffs[i].first,
+      pos.second + diffs[i].second 
+    );
+
+    if( map[ neighbor.second ][ neighbor.first ] != Map::INF )
+      valid_neighs.push_back( neighbor ) ;
+  }
+
+  return valid_neighs;
+}
+
 
 
