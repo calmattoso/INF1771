@@ -43,7 +43,7 @@ string Utils::ReadFile(const char * fileName)
       while( rem_ws >> line )
       {
         input.append( line );
-    }
+      }
     }
 
     mapFile.close();
