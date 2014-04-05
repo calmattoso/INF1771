@@ -9,15 +9,15 @@
 using namespace std;
 
 int main(){
-  string strMain     = Utils::ReadFile("../maps/mapa_zelda1.txt"  ),
-         strDungeon1 = Utils::ReadFile("../maps/mapa_dungeon1.txt"),
-         strDungeon2 = Utils::ReadFile("../maps/mapa_dungeon2.txt"),
-         strDungeon3 = Utils::ReadFile("../maps/mapa_dungeon3.txt") ;
+  string strMain     = Utils::ReadFile("../maps/mapa0.txt"),
+         strDungeon1 = Utils::ReadFile("../maps/dun1.txt"),
+         strDungeon2 = Utils::ReadFile("../maps/dun2.txt"),
+         strDungeon3 = Utils::ReadFile("../maps/dun3.txt") ;
    
   Map overworld( strMain , 42 ),
-      dungeon1( strDungeon1 , 28 ),
-      dungeon2( strDungeon2 , 28 ),
-      dungeon3( strDungeon3 , 28 );
+      dungeon1 ( strDungeon1 , 28 ),
+      dungeon2 ( strDungeon2 , 28 ),
+      dungeon3 ( strDungeon3 , 28 );
       
   dungeon1.Display(true);
 
