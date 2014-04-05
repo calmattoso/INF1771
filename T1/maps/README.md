@@ -1,19 +1,32 @@
-Input Map File Grammar
-======================
+## Map Definition File Format
 
-`<info>` \n\n `<gates>` \n\n `<map>`
+Input files will respect the following format:
 
-`<info>`: id n_gates width height 
-`<gates>`: n_gates*`<gate>`  
-  the `<gates>` semantics change with the id of the map:
-  if id == 1 then
-    map is overworld, 
-    each gate will be where the gate is on the map and to which dungeon the gate is for
-  else
-    the first gate is the item location and the id of the item
-    and the second the position of the gate that will lead to overworld 
-`<gate>`: x y dest_id
-`<map>`: height*`<line>`
-`<line>`: width*`<char>`
-`<char>` = {F,G,S,M,W,D,L}
+```html
+<info>
+<gates>
+<map>
+```
+
+The above tags respect the following grammar:
+
+
+- `<info>`: **id** &nbsp; **n_gates** &nbsp; **width** &nbsp; **height**
+  - **id**: id of the map
+  - **n_gates**: number of gates on the map
+  - **width**: number of columns
+  - **height**: number of lines
+- `<gates>`: **n_gates** * `<gate>`  
+  - the `<gates>` semantics change with the **id** of the map:    
+    if **id** == 1 then    
+      &nbsp;&nbsp; map is overworld,    
+      &nbsp;&nbsp; each gate is the position of the gate on the map followed by the destination dungeon id    
+    else    
+      &nbsp;&nbsp; the first gate is the item location followed by the id of the item    
+      &nbsp;&nbsp; the second gate is the position of the gate that will take to overworld 
+    
+- `<gate>`: **x** &nbsp; **y** &nbsp; **dest_id**
+- `<map>` : **height** * `<line>`
+- `<line>`: **width** * `<char>`
+- `<char>`: { F , G , S , M , W , D , L }
 
