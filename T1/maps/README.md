@@ -20,7 +20,7 @@ The above tags respect the following grammar:
   - the `<gates>` semantics change with the **id** of the map:    
     if **id** == 1 then    
       &nbsp;&nbsp; map is overworld,    
-      &nbsp;&nbsp; each gate ihs the position of the gate on the map followed by the destination dungeon id    
+      &nbsp;&nbsp; each gate is the position of the gate on the map followed by the destination dungeon id    
     else    
       &nbsp;&nbsp; the first gate is the item location followed by the id of the item    
       &nbsp;&nbsp; the second gate is the position of the gate that will take to overworld 
