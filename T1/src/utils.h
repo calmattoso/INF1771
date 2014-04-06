@@ -24,6 +24,8 @@ public:
 
 	static string CoordsToDirections ( Path path );
 
+	static string InvertDirections( string dirs ) ;
+
 	static string CoordsToString ( Path path );
 
 	static MapConfig ReadFile ( const char * );

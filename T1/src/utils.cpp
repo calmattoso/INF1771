@@ -5,6 +5,26 @@
 #include "utils.h"
 #include "map_config.h"
 
+string Utils::InvertDirections( string dirs )
+{
+  stringstream invertedDirs;
+
+  for( int i = 0, len = dirs.size(); i < len; i++)  
+  {
+    
+    switch( (Utils::Directions) ( dirs[i] - '0' ) )
+    {
+      case UP   : invertedDirs << DOWN ; break;
+      case RIGHT: invertedDirs << LEFT ; break;
+      case DOWN : invertedDirs << UP   ; break;
+      case LEFT : invertedDirs << RIGHT; break;
+      default   : invertedDirs << "";
+    }
+  }
+
+  return invertedDirs.str();
+}
+
 string Utils::CoordsToDirections ( Path path )
 {
   stringstream dirs;
