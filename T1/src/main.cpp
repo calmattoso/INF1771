@@ -67,8 +67,7 @@ int main(){
     else 
     {
       int minCost = INFINITY;      
-      
-      vector< State > bestSolution ;       
+     
       for( int j = 0; j < 6; j++)
       {
 
@@ -90,14 +89,6 @@ int main(){
           tentativeSolution.push_back( partialSolution ) ;
         }
 
-        #ifdef DEBUG
-          cout << "Permutation: {";
-          for( int i = 0; i < 5; i++ )
-            cout << ((i > 0) ? ", " : "") << perms[j][i] ;
-          cout << "}" << endl;
-          cout << "cost: " << curCost << endl;
-        #endif
-
         /* if we have found a cheaper path, set it as the best solution */
         if( curCost < minCost )
         {
@@ -105,8 +96,32 @@ int main(){
           minCost = curCost ; 
           overworld.assign(tentativeSolution.begin(), tentativeSolution.end());
         }
+        
+        #ifdef DEBUG
+          cout << "Permutation: {";
+          for( int c = 0; c < 5; c++ )
+            cout << ((c > 0) ? ", " : "") << perms[j][c] ;
+          cout << "}" << endl;
+          cout << "\tcost: " << curCost << endl;
+
+          cout << "\toverworld [ " << curCost << " ] : \n";
+          for( int c = 0, tam = tentativeSolution.size(); c < tam; c++)
+          {
+            cout << "cost: " << tentativeSolution[c].first.second << endl;
+            cout << Utils::CoordsToString( tentativeSolution[c].second ) << endl;
+          }
+          
+          cout << "\tdungeons: \n";
+          for( int c = 0, tam = dungeons.size(); c < tam; c++)
+          {
+            cout << "cost: " << dungeons[c].first.second << endl;
+            cout << Utils::CoordsToString( dungeons[c].second ) << endl;
+          }
+        #endif
       }
     }
+
+    
   }
   timer.stop();
 
@@ -155,7 +170,7 @@ int main(){
       #ifdef DEBUG
         cout << "dg size: " << dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second.size() << endl;
         cout << "dg cost: " << 2*dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second << endl;
-        cost += 2*dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second;
+        cost += 2 * dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second;
       #endif
     }
   } 
