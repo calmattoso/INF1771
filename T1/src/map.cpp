@@ -1,12 +1,27 @@
 #include <iostream>
 #include <cmath>
-#include <set>
+#include <queue>
 #include "map_config.h"
 #include "map.h"
 
 using namespace std;
 
 /* Public */
+
+class SetCompare
+{
+public:
+  
+  bool operator() (const State& lhs, const State& rhs) const
+  {
+    /* first compare total costs */
+    if( lhs.first.first != rhs.first.first )
+      return lhs.first.first > rhs.first.first;
+
+    /* if they're equal, simply compare hops costs */
+    return lhs.first.second > rhs.first.second ; 
+  }
+};
 
 Map::Map( MapConfig mapData , bool isDungeon )
 {
@@ -102,7 +117,8 @@ void Map::Display( )
 
 State Map::Solve(Coord start, Coord goal)
 {
-  set< State > pq ; /* Priority queue */
+ //bool (*fnPt)(State , State) = fncomp;
+  priority_queue< State , vector< State > , SetCompare > pq ; /* Priority queue */
   bool over = false;
   vector<bool> visited( this->length * this->length + 1 , false ); /* Visited nodes are marked; w/ margin */
   State solution;
@@ -114,14 +130,14 @@ State Map::Solve(Coord start, Coord goal)
   #endif
 
   State initial = make_pair( make_pair(0,0) , Path( 1, start ) );
-  pq.insert(initial);
+  pq.push(initial);
 
   while( !over && !pq.empty() )
   {
     /* Get the current path with least cost, and
         remove it from our "heap" */
-    State top = *(pq.begin());
-    pq.erase( pq.begin() );
+    State top = pq.top();
+    pq.pop();
 
     /* Get the last visited node of the candidate path */
     Coord last = *(top.second.rbegin());
@@ -159,15 +175,14 @@ State Map::Solve(Coord start, Coord goal)
             stepsCost = top.first.second + map[line][col];
 
         #ifdef DEBUG
-          cout << " cost: " << totalCost ;
+          cout << "[" << stepsCost << ", " << totalCost << "]"  ;
         #endif 
 
         Path newPath(top.second.begin(), top.second.end());
         newPath.push_back( candidates[i] );
 
         State next( make_pair( totalCost , stepsCost ), newPath );
-        pq.insert( next );
-
+        
         /* check if we reached the goal */
         if( candidates[i] == goal )
         {
@@ -175,6 +190,8 @@ State Map::Solve(Coord start, Coord goal)
           over = true;
           break;
         }
+
+        pq.push( next );
       }
       #ifdef DEBUG
         cout << endl;
@@ -184,6 +201,7 @@ State Map::Solve(Coord start, Coord goal)
 
   #ifdef DEBUG
     cout << "\nSolution found...\n";
+
   #endif
 
   return solution;
@@ -192,9 +210,14 @@ State Map::Solve(Coord start, Coord goal)
 
 /* Private Helpers */
 
-bool Map::fncomp (State lhs, State rhs) 
+bool Map::fncomp ( State lhs, State rhs ) 
 { 
-  return lhs.first < rhs.first ; 
+  /* first compare total costs */
+  if( lhs.first.first != rhs.first.first )
+    return lhs.first.first < rhs.first.first;
+
+  /* if they're equal, simply compare hops costs */
+  return lhs.first.second < rhs.first.second ; 
 }
 
 int Map::ManhattanDistance( Coord from, Coord to )
