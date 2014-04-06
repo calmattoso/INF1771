@@ -153,6 +153,8 @@ int main(){
         Utils::CoordsToDirections( dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second ) , (fstream::out | fstream::app) );
       
       #ifdef DEBUG
+        cout << "dg size: " << dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second.size() << endl;
+        cout << "dg cost: " << 2*dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second << endl;
         cost += 2*dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second;
       #endif
     }
