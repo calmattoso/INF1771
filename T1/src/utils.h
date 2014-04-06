@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include "map_config.h"
 
 using namespace std;
 
@@ -18,13 +20,15 @@ private:
 	};
 
 
-	static string CoordsToDirections ( vector< pair<int,int> > path );
-
 public:
 
-	static string ReadFile ( const char * );
+	static string CoordsToDirections ( Path path );
 
-	static bool   LogSolution ( const char * , string , vector< pair<int,int> > );
+	static string CoordsToString ( Path path );
+
+	static MapConfig ReadFile ( const char * );
+
+	static bool   LogSolution ( const char * , string , string , ios_base::openmode );
 };
 
 #endif

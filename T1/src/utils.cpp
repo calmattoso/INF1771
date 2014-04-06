@@ -3,14 +3,15 @@
 #include <string>
 #include <sstream>
 #include "utils.h"
+#include "map_config.h"
 
-string Utils::CoordsToDirections ( vector< pair<int,int> > path )
+string Utils::CoordsToDirections ( Path path )
 {
   stringstream dirs;
 
   for(int i = 0, len = path.size() - 1; i < len; i++  )
   {
-    pair<int,int> diff = make_pair( 
+    Coord diff = make_pair( 
       path[i + 1].first  - path[i].first ,
       path[i + 1].second - path[i].second
     );
@@ -28,35 +29,72 @@ string Utils::CoordsToDirections ( vector< pair<int,int> > path )
   return dirs.str();
 }
 
-string Utils::ReadFile(const char * fileName)
+string Utils::CoordsToString ( Path path )
+{
+  stringstream str;
+
+  for(int i = 0, len = path.size(); i < len; i++  )
+  {
+    if( i > 0 )
+      str << " -> ";
+    
+    str << "(" << path[i].first << ", " << path[i].second << ") ";
+  }
+  str << "\n";
+
+  return str.str();
+}
+
+
+MapConfig Utils::ReadFile(const char * fileName)
 {
   string line, input = "";
   stringstream rem_ws; /* used to remove whitespaces */
   ifstream mapFile (fileName);
+  int numberOfGates;
+  MapConfig inputMap;
 
   if (mapFile.is_open())
   {
+    /* Read map id, number of gates and width x height */
+    mapFile >> inputMap.id >> numberOfGates >> inputMap.width >> inputMap.height ;
+
+    /* Read all the gates */
+    for( int i = 0 ; i < numberOfGates ; i++ )
+    {
+      Gate g;     
+      int col, line;
+      
+      /* col, line, id (for map or entity) */
+      mapFile >> col >> line >> g.second ;
+
+      g.first.first = col + 1;
+      g.first.second = line + 1;
+
+      inputMap.gates.push_back( g );
+    }
+
+    /* Now read the map itself */
     while ( getline (mapFile, line) )
     {
       stringstream rem_ws( line );
 
       while( rem_ws >> line )
-      {
-        input.append( line );
-      }
+        inputMap.str.append( line );
     }
 
     mapFile.close();
   }
 
-  return input;
+  return inputMap;
 }
 
 
 bool Utils::LogSolution(const char * fileName, string header,
-                        vector< pair<int,int> > path )
+                        string output, ios_base::openmode openMode )
 {
-  ofstream logFile (fileName);
+  fstream  logFile;
+  logFile.open ( fileName, openMode );
 
   if(!logFile.is_open())
     return false;
@@ -64,8 +102,9 @@ bool Utils::LogSolution(const char * fileName, string header,
     logFile << header << endl;
 
   /* first, convert to directions */
-  logFile << CoordsToDirections( path );
+  logFile << output << endl;
 
   logFile.close();
+
   return true;
 }
