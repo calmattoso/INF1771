@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include "CPUTimer.h"
 #include "map_config.h"
 #include "map.h"
@@ -148,7 +149,7 @@ int main(){
 
     /* log the each path for the overworld */
     Utils::LogSolution("../logs/solution.log", "", 
-      Utils::CoordsToDirections( overworld[i].second ) , openMode );
+      Utils::CoordsToDirections( overworld[i].second ) + "0" , openMode );
     
     #ifdef DEBUG
       Coord begin = *(overworld[i].second.begin()),
@@ -164,8 +165,22 @@ int main(){
     /* append dungeon path */
     if( i < len - 1 )
     {
+      string output = Utils::CoordsToDirections( dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second );
+
+      /* door to item */
+      Utils::LogSolution("../logs/solution.log", "", output + "0" , (fstream::out | fstream::app) );
+
+      /* item to door */
+      /* first reverse movement order in the original output; 
+         then invert movements so that Link walks back to the door */
+      reverse( output.begin(), output.end() ); 
       Utils::LogSolution("../logs/solution.log", "", 
-        Utils::CoordsToDirections( dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second ) , (fstream::out | fstream::app) );
+        Utils::InvertDirections( output ) + "0" ,
+        (fstream::out | fstream::app) 
+      );
+
+
+
       
       #ifdef DEBUG
         cout << "dg size: " << dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second.size() << endl;
