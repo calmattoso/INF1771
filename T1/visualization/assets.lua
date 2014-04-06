@@ -7,7 +7,7 @@ color[5] = {0,0,0}
 color[6] = {100,100,100} 
 color[7] = {0,255,255}
 ---link------
-basedir = "../assets/"
+basedir = "/assets/"
 
 local lb  = love.graphics.newImage( basedir.."lb.png")
 local lc  = love.graphics.newImage( basedir.."lc.png")

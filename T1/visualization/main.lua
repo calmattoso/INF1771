@@ -25,20 +25,30 @@ print("\nused: ", window[1],window[2])
  w = n*t -- total width of the map
  h = n*t -- total height of the map
  link = {}
- link.initial_x = 24
- link.initial_y = 27
-
-loadtiles(t)
 
 maps = {}
 gates = {}
+maps_basedir = "../maps/"
+maps[1],gates[1] = read_map(maps_basedir.."mapa0.txt",1)
+maps[2],gates[2] = read_map(maps_basedir.."dun1.txt",2)
+maps[3],gates[3] = read_map(maps_basedir.."dun2.txt",3)
+maps[4],gates[4] = read_map(maps_basedir.."dun3.txt",4)
 
-maps[1],gates[1] = read_map("mapa0.txt",1)
-maps[2],gates[2] = read_map("dun1.txt",2)
-maps[3],gates[3] = read_map("dun2.txt",3)
-maps[4],gates[4] = read_map("dun3.txt",4)
+link.initial_x = gates[1][1].x
+link.initial_y = gates[1][1].y
+table.remove(gates[1],1)
+
+lost_woods_x = gates[1][#gates[1]].x
+lost_woods_y = gates[1][#gates[1]].y
+table.remove(gates[1],#gates[1])
+costs[8] = costs[maps[1][link.initial_y][link.initial_x]]
+maps[1][link.initial_y][link.initial_x] = 8 --link's house
+
+maps[1][lost_woods_x][lost_woods_y] = 7 --lost woods entrance
 
 actual = 1
+
+loadtiles(t)
 
 ----link----
 

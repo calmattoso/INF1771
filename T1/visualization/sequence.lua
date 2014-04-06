@@ -8,7 +8,7 @@ function rev(s)
 end
 
 seq = {}
-path = "solution.log"
+path = "../logs/solution.log"
 --file = io.open(path)
 
 for line in io.lines(path) do 

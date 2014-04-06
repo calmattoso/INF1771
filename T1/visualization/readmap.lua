@@ -53,11 +53,6 @@ for l in string.gmatch(text, "%L") do
   end
 end
 
-if id == 1 then
-  map[7][6] = 7 --lost woods entrance
-  costs[8] = costs[map[link.initial_y][link.initial_x]]
-  map[link.initial_y][link.initial_x] = 8 --link's house
-end
 return map,gates 
 
 
