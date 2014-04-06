@@ -17,9 +17,6 @@ public:
     /* first compare total costs */
     if( lhs.first.first != rhs.first.first )
       return lhs.first.first > rhs.first.first;
-
-    /* if they're equal, simply compare hops costs */
-    return lhs.first.second > rhs.first.second ; 
   }
 };
 
@@ -56,7 +53,7 @@ Map::Map( MapConfig mapData , bool isDungeon )
 
   #ifdef DEBUG
     cout << "New map[" << this->length << "] created..." << endl;
-    this->Display( );
+    this->Display( true );
     cout << "\tGates " << endl;
     for(int i = 0; i < this->gates.size(); i++)
     {
@@ -87,7 +84,7 @@ void Map::ParseMap(string mapStr)
   }
 }
 
-void Map::Display( )
+void Map::Display( bool showCost )
 {
   for(int i = 1; i <= this->length; i++ )
   {
@@ -110,6 +107,9 @@ void Map::Display( )
         code = 'D';
 
       cout << code;
+      if( showCost )
+        cout << "[" << map[i][j] << "] ";
+
     }
     cout << endl;
   }
@@ -129,7 +129,10 @@ State Map::Solve(Coord start, Coord goal)
     cout << "-> (" << goal.first << ", " << goal.second << ")" << endl;
   #endif
 
-  State initial = make_pair( make_pair(0,0) , Path( 1, start ) );
+  State initial = make_pair( 
+    make_pair( ManhattanDistance( start , goal ) , 0 ) ,
+    Path( 1, start ) 
+  );
   pq.push(initial);
 
   while( !over && !pq.empty() )
@@ -166,19 +169,18 @@ State Map::Solve(Coord start, Coord goal)
       {
         visited[idx] = true;
 
-        /* totalCost is an aggregate of: 
-            sum of hops cost + 
-            sum of manhattan distances
-           stepsCost is an aggregate of hops cost */
-        int totalCost = top.first.first + map[line][col] + 
-              ManhattanDistance( candidates[i] , goal ) ,
-            stepsCost = top.first.second + map[line][col];
+        /* stepsCost is the sum of costs of traversed edges from start to candidate
+           totalCost is the aggregate of: 
+            stepsCost + 
+            Manhattan Distance from candidate to goal */
+        int stepsCost = top.first.second + map[line][col],
+            totalCost = stepsCost + ManhattanDistance( candidates[i] , goal ) ;
 
         #ifdef DEBUG
           cout << "[" << stepsCost << ", " << totalCost << "]"  ;
         #endif 
 
-        Path newPath(top.second.begin(), top.second.end());
+        Path newPath( top.second.begin() , top.second.end() );
         newPath.push_back( candidates[i] );
 
         State next( make_pair( totalCost , stepsCost ), newPath );
@@ -209,16 +211,6 @@ State Map::Solve(Coord start, Coord goal)
 
 
 /* Private Helpers */
-
-bool Map::fncomp ( State lhs, State rhs ) 
-{ 
-  /* first compare total costs */
-  if( lhs.first.first != rhs.first.first )
-    return lhs.first.first < rhs.first.first;
-
-  /* if they're equal, simply compare hops costs */
-  return lhs.first.second < rhs.first.second ; 
-}
 
 int Map::ManhattanDistance( Coord from, Coord to )
 {

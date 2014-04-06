@@ -36,8 +36,6 @@ private:
 
   vector< Coord > ExpandFrontier ( Coord ) ;
 
-  static bool fncomp ( State , State ) ;
-
 public:    
   bool isDungeon;
 
@@ -46,7 +44,7 @@ public:
   
   Map( MapConfig , bool );
 
-  void Display( );
+  void Display( bool showCost );
 
   State Solve( Coord , Coord );
 
