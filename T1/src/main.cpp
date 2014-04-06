@@ -3,41 +3,168 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "CPUTimer.h"
+#include "map_config.h"
 #include "map.h"
 #include "utils.h"
+
+#define INFINITY 100000000
 
 using namespace std;
 
 int main(){
-  string strMain     = Utils::ReadFile("../maps/mapa0.txt"),
-         strDungeon1 = Utils::ReadFile("../maps/dun1.txt"),
-         strDungeon2 = Utils::ReadFile("../maps/dun2.txt"),
-         strDungeon3 = Utils::ReadFile("../maps/dun3.txt") ;
-   
-  Map overworld( strMain , 42 ),
-      dungeon1 ( strDungeon1 , 28 ),
-      dungeon2 ( strDungeon2 , 28 ),
-      dungeon3 ( strDungeon3 , 28 );
+  CPUTimer timer;
+
+  string inputFiles[] = {
+    "../maps/dun1.txt" ,
+    "../maps/dun2.txt" ,
+    "../maps/dun3.txt" ,
+    "../maps/mapa0.txt"
+  };
+
+  /* Load the maps from the files */
+  vector<Map> maps;
+  for( int i = 0; i < 4 ; i++ )
+  {
+    MapConfig config = Utils::ReadFile( inputFiles[i].c_str() );
+    Map map( config , ( 
+      inputFiles[i].find("dun") != string::npos ?
+        true : false 
+      )
+    );
+
+    maps.push_back( map );
+  }
+    
+
+  /* Now find the best overall path */  
+  vector< State > dungeons, overworld;
+  int perms[ 6 ][ 5 ] = {
+    {0, 1, 2, 3, 4}, 
+    {0, 1, 3, 2, 4}, 
+    {0, 2, 1, 3, 4}, 
+    {0, 2, 3, 1, 4}, 
+    {0, 3, 1, 2, 4}, 
+    {0, 3, 2, 1, 4}
+  };
+  int bestPermIdx = 0;
+
+  timer.start();
+  for( int i = 0, len = maps.size(); i < len; i++)
+  {
+    /* for a dungeon we just have two endpoints, go from one to the other */
+    if( maps[i].isDungeon )
+    {
+      dungeons.push_back(
+        maps[i].Solve( maps[i].gates[1].first , maps[i].gates[0].first )
+      );
+    }
+
+    /* solve for overworld:
+         - we know the start and end positions
+         - test different permutations of dungeons
+    */
+    else 
+    {
+      int minCost = INFINITY;      
       
-  dungeon1.Display(true);
+      vector< State > bestSolution ;       
+      for( int j = 0; j < 6; j++)
+      {
 
-  State solutionDg1 = dungeon1.Solve( make_pair( 15 , 27 ) , make_pair( 14 , 4 ) ),
-        solutionDg2 = dungeon2.Solve( make_pair( 14 , 26 ) , make_pair( 14 , 3 ) ),
-        solutionDg3 = dungeon3.Solve( make_pair( 15 , 26 ) , make_pair( 16 , 20 ) );
+        int curCost = 0;
+        vector< State > tentativeSolution;
 
+        /* Find out the best paths for a given permutation;
+           remember the total cost */
+        for( int k = 0; k < 4; k++)
+        {
+          State partialSolution = maps[i].Solve( 
+            maps[i].gates[ perms[ j ][ k ] ].first ,
+            maps[i].gates[ perms[ j ][ k + 1 ] ].first 
+          );
 
-  stringstream header;
-  header << solutionDg1.first.second;
-  Utils::LogSolution("../logs/dg1.log", header.str(), solutionDg1.second);
+          /* take into account the steps cost of this path */
+          curCost += partialSolution.first.second ; 
 
-  header.str("");
-  header << solutionDg2.first.second;
-  Utils::LogSolution("../logs/dg2.log", header.str(), solutionDg2.second);
+          tentativeSolution.push_back( partialSolution ) ;
+        }
 
-  header.str("");
-  header << solutionDg3.first.second;
-  Utils::LogSolution("../logs/dg3.log", header.str(), solutionDg3.second);
+        #ifdef DEBUG
+          cout << "Permutation: {";
+          for( int i = 0; i < 5; i++ )
+            cout << ((i > 0) ? ", " : "") << perms[j][i] ;
+          cout << "}" << endl;
+          cout << "cost: " << curCost << endl;
+        #endif
 
+        /* if we have found a cheaper path, set it as the best solution */
+        if( curCost < minCost )
+        {
+          bestPermIdx = j ;
+          minCost = curCost ; 
+          overworld.assign(tentativeSolution.begin(), tentativeSolution.end());
+        }
+      }
+    }
+  }
+  timer.stop();
+
+  #ifdef DEBUG
+    cout << "Best permutation: \n";
+    for( int i = 0; i < 5; i++ )
+      cout << perms[ bestPermIdx ][ i ] << " ";
+    cout << endl << endl;
+
+    cout << "Number of paths\n";
+    cout << "\t@overworld: " << overworld.size() << endl;
+    cout << "\t@dungeons : " << dungeons.size() << endl;
+  #endif
+
+  #ifdef DEBUG
+    int cost = 0;
+  #endif
+
+  for( int i = 0, len = overworld.size(); i < len; i++)
+  {
+    ios_base::openmode openMode = fstream::out | (
+      ( i > 0 ) ? fstream::app : fstream::out 
+    );
+
+    /* log the each path for the overworld */
+    Utils::LogSolution("../logs/solution.log", "", 
+      Utils::CoordsToString( overworld[i].second ) , openMode );
+    
+    #ifdef DEBUG
+      Coord begin = *(overworld[i].second.begin()),
+            end   = *(overworld[i].second.rbegin());
+
+      cout << "(" << begin.first << ", " << begin.second << ") -> ";
+      cout << "(" << end.first   << ", " << end.second   << ")\n";
+      cout << "\tcost: [" << overworld[i].first.second << ", " << overworld[i].first.first << "]\n";
+
+      cost += overworld[i].first.second;
+    #endif
+
+    /* append dungeon path */
+    if( i < len - 1 )
+    {
+      Utils::LogSolution("../logs/solution.log", "", 
+        Utils::CoordsToString( dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second ) , (fstream::out | fstream::app) );
+      
+      #ifdef DEBUG
+        cost += 2*dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second;
+      #endif
+    }
+  } 
+
+  #ifdef DEBUG
+    cout << "Overall cost: " << cost << endl;
+  #endif
+
+  #ifdef TIMER
+    cout << "Time: " << timer.getCPUTotalSecs() << endl;
+  #endif
 
   return 0;
 }
