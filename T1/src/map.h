@@ -3,20 +3,9 @@
 
 #include <string>
 #include <vector>
+#include "map_config.h"
 
 using namespace std;
-
-/* column (x), line (y) */
-typedef pair<int,int> Coord; 
-
-/* Sequence of nodes */
-typedef vector< Coord > Path;
-
-/* total cost ( w/ h(node) ), movements cost */
-typedef pair<int, int> Cost;
-
-/* cost, path */
-typedef pair< Cost , Path > State;
 
 class Map {
 private:
@@ -35,22 +24,31 @@ private:
 
   /* Added margins to avoid overflow, with a ludicrous cost */
   vector<Map::TerrainTypes> map[MAP_LEN + 2];
+
+  /* square matrix, width == height */
   int length;      
 
   void ParseMap( string );
 
   int ManhattanDistance( Coord , Coord );
 
+  inline bool IsValidCoord( Coord pos );
+
   vector< Coord > ExpandFrontier ( Coord ) ;
 
   static bool fncomp ( State , State ) ;
 
 public:    
-    Map(string , int);
+  bool isDungeon;
 
-    void Display(bool);
+  /* all gates/entities on the map */
+  vector< Gate > gates;
+  
+  Map( MapConfig , bool );
 
-    State Solve( Coord , Coord );
+  void Display( );
+
+  State Solve( Coord , Coord );
 
 };
 

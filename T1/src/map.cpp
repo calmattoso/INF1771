@@ -1,15 +1,16 @@
 #include <iostream>
 #include <cmath>
 #include <set>
+#include "map_config.h"
 #include "map.h"
 
 using namespace std;
 
 /* Public */
 
-Map::Map(string mapData, int length)
+Map::Map( MapConfig mapData , bool isDungeon )
 {
-  int totalLen = length + 2;
+  int totalLen = mapData.width + 2;
 
   for (int i = 0; i < totalLen; ++i)
   {
@@ -28,23 +29,37 @@ Map::Map(string mapData, int length)
     }
   }
 
-  this->length = length;
+  this->isDungeon = isDungeon ;
+  this->length = mapData.width;
+
+  /* copy the gates */
+  this->gates.assign(mapData.gates.begin() , mapData.gates.end() ) ;
 
   /* set the cost for each position,
      based on the input string */
-  ParseMap(mapData);
+  ParseMap(mapData.str);
+
+  #ifdef DEBUG
+    cout << "New map[" << this->length << "] created..." << endl;
+    this->Display( );
+    cout << "\tGates " << endl;
+    for(int i = 0; i < this->gates.size(); i++)
+    {
+      cout << "\t  " << this->gates[i].first.first << " " << this->gates[i].first.second << endl;
+    }
+  #endif
 }
 
-void Map::ParseMap(string mapData)
+void Map::ParseMap(string mapStr)
 {
   int line, col, mapLen = this->length;
 
-  for(int i = 0, len = mapData.size(); i < len; i++ )
+  for(int i = 0, len = mapStr.size(); i < len; i++ )
   {
     line = ( i / mapLen ) + 1;
     col  = ( i % mapLen ) + 1;
 
-    switch( mapData[i] )
+    switch( mapStr[i] )
     {
       case 'L': /* has same cost as grass */
       case 'G': map[line][col] = Map::GRASS;    break;
@@ -57,7 +72,7 @@ void Map::ParseMap(string mapData)
   }
 }
 
-void Map::Display(bool isDungeon)
+void Map::Display( )
 {
   for(int i = 1; i <= this->length; i++ )
   {
@@ -88,26 +103,35 @@ void Map::Display(bool isDungeon)
 State Map::Solve(Coord start, Coord goal)
 {
   set< State > pq ; /* Priority queue */
+  bool over = false;
   vector<bool> visited( this->length * this->length + 1 , false ); /* Visited nodes are marked; w/ margin */
   State solution;
+
+  #ifdef DEBUG
+    cout << "Solving for:" << endl;
+    cout << "\t (" << start.first << ", " << start.second << ") ";
+    cout << "-> (" << goal.first << ", " << goal.second << ")" << endl;
+  #endif
 
   State initial = make_pair( make_pair(0,0) , Path( 1, start ) );
   pq.insert(initial);
 
-  while( !pq.empty() )
+  while( !over && !pq.empty() )
   {
     /* Get the current path with least cost, and
         remove it from our "heap" */
     State top = *(pq.begin());
     pq.erase( pq.begin() );
-    
+
     /* Get the last visited node of the candidate path */
     Coord last = *(top.second.rbegin());
+
+    #ifdef DEBUG
+      cout << "(" << last.first << "," << last.second << ") [" << top.first.second << ", " << top.first.first << "]" << endl;
+    #endif
     
     /* Identify possible new expansions*/
-    vector< Coord > candidates = ExpandFrontier( last );
-
-    //cout << "(" << last.first << "," << last.second << ") [" << top.first << "]" << endl;
+    vector< Coord > candidates = ExpandFrontier( last );    
 
     for( int i = 0, len = candidates.size(); i < len ; i++)
     {
@@ -118,6 +142,10 @@ State Map::Solve(Coord start, Coord goal)
       /* Adding to the heap paths which do not take us back
           to a previously seen node; if the goal state is reached,
           exit the loop and return it */ 
+        #ifdef DEBUG
+          cout << "\t@(" << col << "," << line << ") ";
+        #endif
+
       if( !visited[ idx ] )
       {
         visited[idx] = true;
@@ -127,10 +155,12 @@ State Map::Solve(Coord start, Coord goal)
             sum of manhattan distances
            stepsCost is an aggregate of hops cost */
         int totalCost = top.first.first + map[line][col] + 
-                ManhattanDistance( candidates[i] , goal ) ,
+              ManhattanDistance( candidates[i] , goal ) ,
             stepsCost = top.first.second + map[line][col];
 
-       // cout << "\t@(" << col << "," << line << ") cost: " << newCost << endl;
+        #ifdef DEBUG
+          cout << " cost: " << totalCost ;
+        #endif 
 
         Path newPath(top.second.begin(), top.second.end());
         newPath.push_back( candidates[i] );
@@ -142,11 +172,19 @@ State Map::Solve(Coord start, Coord goal)
         if( candidates[i] == goal )
         {
           solution = next;
+          over = true;
           break;
         }
       }
+      #ifdef DEBUG
+        cout << endl;
+      #endif
     }
   } 
+
+  #ifdef DEBUG
+    cout << "\nSolution found...\n";
+  #endif
 
   return solution;
 }
@@ -164,6 +202,14 @@ int Map::ManhattanDistance( Coord from, Coord to )
   return abs( to.first - from.first ) + abs( to.second - from.second );
 }
 
+bool Map::IsValidCoord( Coord pos )
+{
+  if( pos.first  < 1 || pos.first > this->length  ||
+      pos.second < 1 || pos.second > this->length  )
+      return false;
+  return true;
+}
+
 vector< Coord > Map::ExpandFrontier ( Coord pos ) 
 {
   /* Right, Left, Down, Up */
@@ -172,7 +218,7 @@ vector< Coord > Map::ExpandFrontier ( Coord pos )
     Coord( 0 , 1 ) , Coord(  0 , -1 )
   };
 
-  vector< Coord > valid_neighs;
+  vector< Coord > valid_neighs;  
 
   /* Get each possible neighbor, check if it's valid, return final list */
   for(int i = 0; i < 4; i++)
@@ -182,7 +228,8 @@ vector< Coord > Map::ExpandFrontier ( Coord pos )
       pos.second + diffs[i].second 
     );
 
-    if( map[ neighbor.second ][ neighbor.first ] != Map::INF )
+    if( IsValidCoord( neighbor ) &&
+        map[ neighbor.second ][ neighbor.first ] != Map::INF )
       valid_neighs.push_back( neighbor ) ;
   }
 
