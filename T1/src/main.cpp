@@ -133,7 +133,7 @@ int main(){
 
     /* log the each path for the overworld */
     Utils::LogSolution("../logs/solution.log", "", 
-      Utils::CoordsToString( overworld[i].second ) , openMode );
+      Utils::CoordsToDirections( overworld[i].second ) , openMode );
     
     #ifdef DEBUG
       Coord begin = *(overworld[i].second.begin()),
@@ -150,7 +150,7 @@ int main(){
     if( i < len - 1 )
     {
       Utils::LogSolution("../logs/solution.log", "", 
-        Utils::CoordsToString( dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second ) , (fstream::out | fstream::app) );
+        Utils::CoordsToDirections( dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].second ) , (fstream::out | fstream::app) );
       
       #ifdef DEBUG
         cost += 2*dungeons[ perms[ bestPermIdx ][ i+1 ] - 1 ].first.second;
