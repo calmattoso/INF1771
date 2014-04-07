@@ -111,7 +111,6 @@ function update_view(dt)
    else  
      step = 1000000000
      temp_step = 10000000000
-     cost = cost + 10--costs[maps[actual][link.y/t+1][link.x/t+1]]
      item[5] = cost
    end
    T = 0
@@ -203,7 +202,7 @@ function love.draw()
 	--else draw item[i]
 	end 
  end
- if item[5] > 0 then love.graphics.print("Thank you for watching! Final cost:"..item[5],(n+1)*t,(20)*t); end
+ if item[5] > 0 then love.graphics.print("Thank you for watching!\nFinal cost: "..item[5],(n+1)*t,(20)*t); end
 end
 
 function love.quit()
