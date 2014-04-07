@@ -30,7 +30,7 @@ public:
 
 	static MapConfig ReadFile ( const char * );
 
-	static bool   LogSolution ( const char * , string , string , ios_base::openmode );
+	static bool   LogSolution ( const char * , string , string , ios::openmode );
 };
 
 #endif
