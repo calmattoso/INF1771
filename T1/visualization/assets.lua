@@ -24,7 +24,7 @@ assetsTiles = love.graphics.newImage( basedir.."tiles2.png" )
 
 song = {}
 song[1] = basedir.."song.mp3"
-song[2] = "dun2.mp3"
-song[3] = "dun3.mp3"
-song[4] = "dun4.mp3"
-song_item = "item.mp3"
+song[2] = basedir.."dun1.mp3"
+song[3] = basedir.."dun1.mp3"
+song[4] = basedir.."dun1.mp3"
+song_item = basedir.."item.mp3"
