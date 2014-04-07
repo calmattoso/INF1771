@@ -24,10 +24,13 @@ function updateTilesetBatch(_map,_gate)
       end
     end
   end
-
+if actual == 1 then
   for i=1,#_gate do
     tilesetBatch:set(n*(_gate[i].y) + (_gate[i].x),tileQuads[6], (_gate[i].x)*t, (_gate[i].y)*t,0,t/30,t/30)
   end  
+else
+	  tilesetBatch:set(28*(_gate[2].y) + (_gate[2].x),tileQuads[6], (_gate[2].x)*t, (_gate[2].y)*t,0,t/30,t/30)
+end
 
   tilesetBatch:unbind()
 end

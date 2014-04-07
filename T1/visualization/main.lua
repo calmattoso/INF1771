@@ -44,7 +44,8 @@ table.remove(gates[1],#gates[1])
 costs[8] = costs[maps[1][link.initial_y][link.initial_x]]
 maps[1][link.initial_y+1][link.initial_x+1] = 8 --link's house
 
-maps[1][lost_woods_x+1][lost_woods_y+1] = 7 --lost woods entrance
+costs[7] = costs[maps[1][lost_woods_x][lost_woods_y+2]]
+maps[1][lost_woods_x][lost_woods_y+2] = 7 --lost woods entrance
 
 actual = 1
 
@@ -65,10 +66,21 @@ loadtiles(t)
     Sn = 1
     Sm = 1
     cost = 0
-    step = 0.4
+    step = 0.01
     temp_step = step
  ----tile set batch-----
-    item = {1,1,1,1}
+    item = {}
+    for i=2,4 do
+	item[i] = {}
+	item[i].value = 0
+        item[i].x = gates[i][1].x
+	item[i].y = gates[i][1].y
+    end
+	item[2].text = "wisdom"
+	item[3].text = "courage"
+	item[4].text = "strength"
+
+item[5] = 0
   updateTilesetBatch(maps[actual],gates[actual])
     ----sound----
     TEsound.play(song[actual],"world")
@@ -79,19 +91,28 @@ end
 function update_view(dt)
    if T>step then 
    step = temp_step
-   if Sm<#seq then 
+   if Sm<#seq+1 then 
      if seq[Sm][Sn]==0 then 
-       print("entrou")
+       --print("entrou")
        action()
        Sm = Sm + 1
        Sn = 1
-     end  
+       --[[if Sm == #seq+1 then 
+		step = 100000000
+		temp_step = 10000000
+		Sm=1--]]
+	end 
+     if Sm ~= #seq+1 then 
      if seq[Sm][Sn]>0 then 
-       move(seq[Sm][Sn])
+     	  move(seq[Sm][Sn])
      end
+    end
      Sn = Sn + 1
    else  
-     --finished 
+     step = 1000000000
+     temp_step = 10000000000
+     cost = cost + 10--costs[maps[actual][link.y/t+1][link.x/t+1]]
+     item[5] = cost
    end
    T = 0
  end
@@ -111,7 +132,7 @@ print("acao")
       temp_step = step
       step = 2
       TEsound.play(song_item)
-      item[actual] = 0
+      item[actual].value = cost
       link.x = link.x
      else  
 print("teac:"..actual)
@@ -130,7 +151,7 @@ print("teac:"..actual)
 	--print(link.y/t,gates[actual][i].y)
         if link.x/t == gates[actual][i].x and link.y/t == gates[actual][i].y then
             actual = 1 + gates[actual][i].dest--change map
-  	    updateTilesetBatch(maps[actual],{gates[actual][2]})
+  	    updateTilesetBatch(maps[actual],gates[actual])
 	    print("actual:"..actual)
             TEsound.stop("world")
 	    TEsound.playLooping(song[actual],"dun")
@@ -176,9 +197,13 @@ function love.draw()
  --love.graphics.print("The legend of zelda\n A* to the past",(n+10)*t,5*t) 
  love.graphics.draw(logo,(n+1)*t,5*t,0,0.01*t,0.01*t)
  love.graphics.print("cost: "..cost,(n+1)*t,15*t)
- --if item[actual] then 
-    --desenha assets_item[actual] em gates[actual][1].x,gates[actual][1].y
- --end
+	
+ for i=2,4 do  
+	if item[i].value>0 then love.graphics.print("got jewel of "..item[i].text.." with this effort: "..item[i].value,(n+1)*t,(15+i)*t) 
+	--else draw item[i]
+	end 
+ end
+ if item[5] > 0 then love.graphics.print("Thank you for watching! Final cost:"..item[5],(n+1)*t,(20)*t); end
 end
 
 function love.quit()
