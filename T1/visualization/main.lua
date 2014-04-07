@@ -66,7 +66,7 @@ loadtiles(t)
     Sn = 1
     Sm = 1
     cost = 0
-    step = 0.01
+    step = 0.2
     temp_step = step
  ----tile set batch-----
     item = {}
@@ -125,7 +125,6 @@ function love.update(dt)
 end
 
 function action()
-print("acao") 
  if actual ~= 1 then --dungeon
      if link.x/t == gates[actual][1].x and link.y/t == gates[actual][1].y then --item
       temp_step = step
@@ -134,7 +133,6 @@ print("acao")
       item[actual].value = cost
       link.x = link.x
      else  
-print("teac:"..actual)
       TEsound.stop("dun")
       actual = 1
       TEsound.play(song[1],"world")
@@ -198,8 +196,10 @@ function love.draw()
  love.graphics.print("cost: "..cost,(n+1)*t,15*t)
 	
  for i=2,4 do  
-	if item[i].value>0 then love.graphics.print("got jewel of "..item[i].text.." with this effort: "..item[i].value,(n+1)*t,(15+i)*t) 
-	--else draw item[i]
+	if item[i].value>0 then 
+		love.graphics.print("got jewel of "..item[i].text.." with this effort: "..item[i].value,(n+1)*t,(15+i)*t) 
+		if i==actual then love.graphics.draw(chest_o,item[i].x*t,item[i].y*t) end--scale
+	elseif i ==actual then love.graphics.draw(chest_c,item[i].x*t,item[i].y*t)
 	end 
  end
  if item[5] > 0 then love.graphics.print("Thank you for watching!\nFinal cost: "..item[5],(n+1)*t,(20)*t); end

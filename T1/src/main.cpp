@@ -13,6 +13,9 @@
 
 using namespace std;
 
+int pd[5][5];
+State paths[5][5];
+
 int main(){
   CPUTimer timer;
 
@@ -49,6 +52,10 @@ int main(){
     {0, 3, 2, 1, 4}
   };
   int bestPermIdx = 0;
+  
+  for( int i = 0; i < 5; i++ )
+    for( int j = 0; j < 5; j++ )
+      pd[i][j] = 0;
 
   timer.start();
   for( int i = 0, len = maps.size(); i < len; i++)
@@ -79,13 +86,28 @@ int main(){
            remember the total cost */
         for( int k = 0; k < 4; k++)
         {
-          State partialSolution = maps[i].Solve( 
-            maps[i].gates[ perms[ j ][ k ] ].first ,
-            maps[i].gates[ perms[ j ][ k + 1 ] ].first 
-          );
-
+          State partialSolution;
+          
+          int from = perms[ j ][ k ] ,
+              to   = perms[ j ][ k + 1 ] ; 
+          
+          if( pd[ from ][ to ] == 0 )
+          {
+            partialSolution = maps[i].Solve( 
+              maps[i].gates[ from ].first ,
+              maps[i].gates[ to   ].first 
+            );
+            
+            paths[ from ][ to ] = paths[ to ][ from ] = partialSolution;
+            reverse( (paths[to][from]).second.begin() , (paths[to][from]).second.end() );
+            pd[ from ][ to ] = pd[ to ][ from ] = partialSolution.first.second;
+          }
+          else {
+            partialSolution = paths[ from ][ to ];
+          }
+          
           /* take into account the steps cost of this path */
-          curCost += partialSolution.first.second ; 
+          curCost += pd[ from ][ to ] ; 
 
           tentativeSolution.push_back( partialSolution ) ;
         }
@@ -143,7 +165,7 @@ int main(){
 
   for( int i = 0, len = overworld.size(); i < len; i++)
   {
-    ios_base::openmode openMode = fstream::out | (
+    ios::openmode openMode = fstream::out | (
       ( i > 0 ) ? fstream::app : fstream::out 
     );
 
