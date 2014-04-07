@@ -65,8 +65,8 @@ loadtiles(t)
     Sn = 1
     Sm = 1
     cost = 0
-    step = 0.4
-    temp_step = 0.4
+    step = 0.1
+    temp_step = step
  ----tile set batch-----
     item = {1,1,1,1}
   updateTilesetBatch(maps[actual],gates[actual])
@@ -80,15 +80,15 @@ function update_view(dt)
    if T>step then 
    step = temp_step
    if Sm<#seq then 
-     if seq[Sm][Sn]>0 then 
-       move(seq[Sm][Sn])
-     end
      if seq[Sm][Sn]==0 then 
        print("entrou")
        action()
        Sm = Sm + 1
        Sn = 1
      end  
+     if seq[Sm][Sn]>0 then 
+       move(seq[Sm][Sn])
+     end
      Sn = Sn + 1
    else  
      --finished 
@@ -112,12 +112,12 @@ print("acao")
       step = 2
       TEsound.play(song_item)
       item[actual] = 0
-      link.x = link.x - t
+      link.x = link.x
      else  
 print("teac:"..actual)
       TEsound.stop("dun")
       actual = 1
-      TEsound.play(song[actual])
+      TEsound.play(song[1],"world")
       updateTilesetBatch(maps[actual],gates[actual])
       link.x = old_link_x
       link.y = old_link_y
@@ -130,13 +130,12 @@ print("teac:"..actual)
 	--print(link.y/t,gates[actual][i].y)
         if link.x/t == gates[actual][i].x and link.y/t == gates[actual][i].y then
             actual = 1 + gates[actual][i].dest--change map
-            
   	    updateTilesetBatch(maps[actual],{gates[actual][2]})
 	    print("actual:"..actual)
             TEsound.stop("world")
 	    TEsound.playLooping(song[actual],"dun")
             link.x = t*(gates[actual][2].x)
-            link.y = t*(gates[actual][2].y-1)
+            link.y = t*(gates[actual][2].y)
             break
 	end
       end
@@ -157,6 +156,7 @@ function move(way)
   if way == 3 then link.y = link.y + t;link.anim = anims.baixo end
   if way == 4 then link.x = link.x - t;link.anim = anims.esq end
   cost = cost + costs[maps[actual][link.y/t+1][link.x/t+1]]
+--  print(link.x/t,link.y/t,maps[actual][link.y/t+1][link.x/t+1])
 end
 
 

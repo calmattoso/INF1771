@@ -16,6 +16,6 @@ costs = {
 [6] = 20,  --portao --todos os portoes tao na areia, se eles estiverem em terrenos diferentes babou
 [7] = 0,  --entrada lost woods
 [8] = 0,  --casa link
-[9] = 10,   --D
-[10] = 1000 --L
+[9] = 1000,   --D
+[10] = 10 --L
 }
