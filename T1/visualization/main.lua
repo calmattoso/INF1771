@@ -71,7 +71,7 @@ loadtiles(t)
     item = {1,1,1,1}
   updateTilesetBatch(maps[actual],gates[actual])
     ----sound----
-    TEsound.play(song[actual],actual)
+    TEsound.play(song[actual],"world")
     
     
 end
@@ -112,10 +112,13 @@ print("acao")
       step = 2
       TEsound.play(song_item)
       item[actual] = 0
-    else  
-TEsound.stop(actual)
+      link.x = link.x - t
+     else  
+print("teac:"..actual)
+      TEsound.stop("dun")
       actual = 1
       TEsound.play(song[actual])
+      updateTilesetBatch(maps[actual],gates[actual])
       link.x = old_link_x
       link.y = old_link_y
     end
@@ -130,8 +133,8 @@ TEsound.stop(actual)
             
   	    updateTilesetBatch(maps[actual],{gates[actual][2]})
 	    print("actual:"..actual)
-            TEsound.stop(1)
-	    TEsound.playLooping(song[actual],actual)
+            TEsound.stop("world")
+	    TEsound.playLooping(song[actual],"dun")
             link.x = t*(gates[actual][2].x)
             link.y = t*(gates[actual][2].y-1)
             break
@@ -153,7 +156,7 @@ function move(way)
   if way == 2 then link.x = link.x + t;link.anim = anims.dir end
   if way == 3 then link.y = link.y + t;link.anim = anims.baixo end
   if way == 4 then link.x = link.x - t;link.anim = anims.esq end
-  cost = cost + costs[maps[actual][link.y/t][link.x/t]]
+  cost = cost + costs[maps[actual][link.y/t+1][link.x/t+1]]
 end
 
 
