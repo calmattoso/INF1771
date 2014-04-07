@@ -65,7 +65,7 @@ loadtiles(t)
     Sn = 1
     Sm = 1
     cost = 0
-    step = 0.1
+    step = 0.4
     temp_step = step
  ----tile set batch-----
     item = {1,1,1,1}
@@ -173,7 +173,8 @@ function love.draw()
 
  love.graphics.draw(tilesetBatch)
  drawlink()
- love.graphics.print("The legend of zelda\n A* to the past",(n+10)*t,5*t) 
+ --love.graphics.print("The legend of zelda\n A* to the past",(n+10)*t,5*t) 
+ love.graphics.draw(logo,(n+1)*t,5*t,0,0.01*t,0.01*t)
  love.graphics.print("cost: "..cost,(n+1)*t,15*t)
  --if item[actual] then 
     --desenha assets_item[actual] em gates[actual][1].x,gates[actual][1].y

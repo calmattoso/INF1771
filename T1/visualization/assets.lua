@@ -14,6 +14,8 @@ local lc  = love.graphics.newImage( basedir.."lc.png")
 local le  = love.graphics.newImage( basedir.."le.png")
 local ld  = love.graphics.newImage( basedir.."ld.png")
 
+logo = love.graphics.newImage(basedir.."bg.png")
+
 anims = {}
     anims.baixo = newAnimation(lb, 32.5, 35, 0.1, 6)
     anims.cima = newAnimation(lc, 32.5, 35, 0.1, 6)
