@@ -68,6 +68,8 @@ loadtiles(t)
     cost = 0
     step = 0.2
     temp_step = step
+    started = false
+    press_text = false
  ----tile set batch-----
     item = {}
     for i=2,4 do
@@ -83,8 +85,9 @@ loadtiles(t)
 item[5] = 0
   updateTilesetBatch(maps[actual],gates[actual])
     ----sound----
-    TEsound.play(song[actual],"world")
     
+
+TEsound.play(song[actual],"world")
     
 end
 
@@ -119,9 +122,18 @@ function update_view(dt)
 end
 
 function love.update(dt)
-  link.anim:update(dt)
-  update_view(dt)
-  TEsound.cleanup()
+ 
+  if started then
+	update_view(dt)
+  	link.anim:update(dt)
+  else
+	if T>step then 
+		press_text = not press_text 
+		T = 0
+	end 
+	T = T + dt
+  end
+TEsound.cleanup()
 end
 
 function action()
@@ -160,14 +172,14 @@ function action()
   end	
 end
 
-
+--[[
 function love.keypressed(key, unicode)
   if key == "a" then link.x = link.x - t;link.anim = anims.esq end
   if key == "s" then link.y = link.y + t;link.anim = anims.baixo end
   if key == "d" then link.x = link.x + t;link.anim = anims.dir end
   if key == "w" then link.y = link.y - t;link.anim = anims.cima end
 end
-
+--]]
 function move(way)
   if way == 1 then link.y = link.y - t;link.anim = anims.cima end
   if way == 2 then link.x = link.x + t;link.anim = anims.dir end
@@ -177,7 +189,11 @@ function move(way)
 --  print(link.x/t,link.y/t,maps[actual][link.y/t+1][link.x/t+1])
 end
 
-
+function love.keypressed(key)
+   if not started then
+      started = true
+   end
+end
 
 function drawlink()
     love.graphics.push()
@@ -188,7 +204,7 @@ end
 
 
 function love.draw()
-
+if started then
  love.graphics.draw(tilesetBatch)
  drawlink()
  --love.graphics.print("The legend of zelda\n A* to the past",(n+10)*t,5*t) 
@@ -203,8 +219,12 @@ function love.draw()
 	end 
  end
  if item[5] > 0 then love.graphics.print("Thank you for watching!\nFinal cost: "..item[5],(n+1)*t,(20)*t); end
-end
+else
+	love.graphics.draw(logo,0,0,0,window[1]/logo:getWidth(),window[2]/logo:getHeight())
+	if press_text then love.graphics.print("Press any button to start", window[1]/2,7*window[2]/8, 0, 3, 3) end
 
+end
+end
 function love.quit()
   
 end
