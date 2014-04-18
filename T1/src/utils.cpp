@@ -111,7 +111,7 @@ MapConfig Utils::ReadFile(const char * fileName)
 
 
 bool Utils::LogSolution(const char * fileName, string header,
-                        string output, ios_base::openmode openMode )
+                        string output, ios::openmode openMode )
 {
   fstream  logFile;
   logFile.open ( fileName, openMode );
