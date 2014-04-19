@@ -1,6 +1,11 @@
 -- creates a random map 
 
---terrain = readmap(terrain)
+require("readmap")
+
+terrain = read_map("terreno.txt")
+
+
+--for i=1,#terrain do print(table.concat(terrain[i],"")) end
 
 m = 42
 n = 42
@@ -11,8 +16,8 @@ end
 
 item_id = {
 [1] = "R",
-[2] = "F",
-[4] = "C",
+[2] = "C",
+[3] = "F",
 [4] = "M",
 [5] = "B",
 [6] = "E",
@@ -35,7 +40,7 @@ function validate(item,x,y)
 		return false
 	end
 	--hole, monster, portal and realsword cant share positions
-	if item > 4 and map[x][y] > 4 then 
+	if item > 4 and map[x][y] and map[x][y] > 4 then 
 		return false
 	end
 	return true
@@ -44,15 +49,16 @@ end
 function create(item, num)
 	for i=1,num do
 		x,y = get_pos()
-		while not validate(item,x,y,pos) do
+		while not (validate(item,x,y)) do
 			x,y = get_pos()
 		end
 		map[x][y] = item
-		print(x,y,item_id[item])
+		io.write(x.." "..y.." "..item_id[item].."\n")
 	end
 end
 
 math.randomseed(os.time())
+io.output("items.log")
 create(1,50) -- "rupee"
 create(2,30) -- "heart"
 create(3,30) -- "sword"
