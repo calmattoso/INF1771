@@ -41,7 +41,12 @@ pickup_sword(X,Y) :- sword(X,Y).
 --map based area
 item = {
 [1] = "rupee",
+<<<<<<< HEAD
 [2] = "sword",
+=======
+[2] = "real_sword",
+[3] = "fake_sword",
+>>>>>>> 421daaee524619c6450df68b6f1f4aac9b4dfa63
 [4] = "heart",
 [4] = "sword",--"realsword",
 [5] = "hole",
