@@ -11,7 +11,7 @@ se tem monstro adjacente e energia maior que 10, ataca.
 se em frente estiver seguro, anda.
 vira.
 --]]
-print("
+print([[
 best_action(X,Y,FX,FY,Energy) :- pickup_rupee(X,Y).
 best_action(X,Y,FX,FY,Energy) :- pickup_sword(X,Y).
 best_action(X,Y,FX,FY,Energy) :- pickup_heart(X,Y), Energy<50.
@@ -37,33 +37,24 @@ atack(X,Y) :-
 pickup_heart(X,Y) :- heart(X,Y).
 pickup_rupee(X,Y) :- rupee(X,Y).
 pickup_sword(X,Y) :- sword(X,Y).
-")
+]])
 --map based area
 item = {
 [1] = "rupee",
-<<<<<<< HEAD
-[2] = "sword",
-=======
-[2] = "real_sword",
-[3] = "fake_sword",
->>>>>>> 421daaee524619c6450df68b6f1f4aac9b4dfa63
-[4] = "heart",
+[2] = "heart",
+[3] = "sword",
 [4] = "sword",--"realsword",
 [5] = "hole",
 [6] = "monster",
 [7] = "portal"
 }
-
 --read map using readmap from T1
 
-m = #map
-n = #map[1]
-mapsize = m*n
-for i=0,mapsize do
-	x = i % m
-	y = i / n
-	prolog_o = string.format("%s(%d,%d).", item[map[x][y]],x,y)
-	print(prolog_o)
+
+
+for line in io.lines("items.log") do 
+	_,_,x,y,item = string.find(line, "(.+)%s(.+)%s(.)")
+	print(string.format("%s(%s,%s).",item,x,y))
 end
 
 --do the same for terrain
