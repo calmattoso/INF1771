@@ -1,60 +1,33 @@
---reads a map and make a series of prolog statements based on the map
+require ("readmap")
 
---static area (will not changed based on the map values)
-
---link actions, sorted by priority
---[[
-se tem rupee, pega.
-se tem espada, pega
-se tem coracao e energia<50, pega.	
-se tem monstro adjacente e energia maior que 10, ataca.
-se em frente estiver seguro, anda.
-vira.
---]]
-print([[
-best_action(X,Y,FX,FY,Energy) :- pickup_rupee(X,Y).
-best_action(X,Y,FX,FY,Energy) :- pickup_sword(X,Y).
-best_action(X,Y,FX,FY,Energy) :- pickup_heart(X,Y), Energy<50.
-best_action(X,Y,FX,FY,Energy) :- atack(FX,FY), Energy>10.
-best_action(X,Y,FX,FY,Energy) :- walk(FX,FY).
-best_action(X,Y,Energy) :- turn_right().
-
-%best_action(X,Y,Energy) :- facing(X+1,Y), atack(X+1,Y), Energy>10.
-%best_action(X,Y,Energy) :- facing(X-1,Y), atack(X-1,Y), Energy>10.
-%best_action(X,Y,Energy) :- facing(X,Y+1), atack(X,Y+1), Energy>10.
-%best_action(X,Y,Energy) :- facing(X,Y-1), atack(X,Y-1), Energy>10.
-
-%best_action(X,Y,Energy) :- facing(X+1,Y), safe(X+1,Y).
-%best_action(X,Y,Energy) :- facing(X-1,Y), safe(X-1,Y).
-%best_action(X,Y,Energy) :- facing(X,Y+1), safe(X,Y+1).
-%best_action(X,Y,Energy) :- facing(X,Y-1), safe(X,Y-1).
-
-
-walk() :- muda x = fx ,y = fy
-turn_right() :- cicla entre os 4 estados
-turn_left() :-
-atack(X,Y) :- 
-pickup_heart(X,Y) :- heart(X,Y).
-pickup_rupee(X,Y) :- rupee(X,Y).
-pickup_sword(X,Y) :- sword(X,Y).
-]])
---map based area
-item = {
-[1] = "rupee",
-[2] = "heart",
-[3] = "sword",
-[4] = "sword",--"realsword",
-[5] = "hole",
-[6] = "monster",
-[7] = "portal"
+item_id = {
+["R"] = "rupee_glow",
+["C"] = "fairies",
+["F"] = "pendants_glow",
+["M"] = "pendants_glow",
+["B"] = "breeze",
+["E"] = "noises",
+["V"] = "spatial_distortions"
 }
---read map using readmap from T1
+map = read_map("terreno.txt")
+io.output("src/prolog/info.log")
 
-
-
+for x=1,#map do
+	for y=1,#map[1] do
+ 		if (map[x][y] == "1") then io.write(string.format("pos(%s,%s).",x,y)) end
+	end
+end
 for line in io.lines("items.log") do 
-	_,_,x,y,item = string.find(line, "(.+)%s(.+)%s(.)")
-	print(string.format("%s(%s,%s).",item,x,y))
+	_,_,x,y,item_tmp = string.find(line, "(.+)%s(.+)%s(.)")
+	if item_id =="B" or item_id =="E" or item_id =="V" then 
+		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x+1,y+1)) 
+		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x+1,y-1)) 
+		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x-1,y+1)) 
+		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x-1,y-1)) 
+
+	else 
+		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x,y))
+	end
 end
 
 --do the same for terrain
