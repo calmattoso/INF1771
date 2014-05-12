@@ -1,6 +1,6 @@
 require ("readmap")
 
-item_id = {
+sensor_id = {
 ["R"] = "rupee_glow",
 ["C"] = "fairies",
 ["F"] = "pendants_glow",
@@ -8,6 +8,9 @@ item_id = {
 ["B"] = "breeze",
 ["E"] = "noises",
 ["V"] = "spatial_distortions"
+}
+item_id = {
+	
 }
 map = read_map("terreno.txt")
 io.output("src/prolog/info.log")
@@ -19,14 +22,16 @@ for x=1,#map do
 end
 for line in io.lines("items.log") do 
 	_,_,x,y,item_tmp = string.find(line, "(.+)%s(.+)%s(.)")
-	if item_id =="B" or item_id =="E" or item_id =="V" then 
-		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x+1,y+1)) 
-		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x+1,y-1)) 
-		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x-1,y+1)) 
-		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x-1,y-1)) 
-
+	if item_temp =="B" or item_temp =="E" or item_temp =="V" then 
+		io.write(string.format("%s(%s,%s).",sensor_id[item_tmp],x+1,y+1)) 
+		io.write(string.format("%s(%s,%s).",sensor_id[item_tmp],x+1,y-1)) 
+		io.write(string.format("%s(%s,%s).",sensor_id[item_tmp],x-1,y+1)) 
+		io.write(string.format("%s(%s,%s).",sensor_id[item_tmp],x-1,y-1)) 
 	else 
-		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x,y))
+		io.write(string.format("at(%s,pos(%s,%s)).",sensor_id[item_tmp],x,y))
+	end
+	if item_temp =="B" or item_temp =="E" or item_temp =="V" or item_temp =="M" then 
+		io.write(string.format("%s(%s,%s).",item_id[item_tmp],x,y)) 
 	end
 end
 
