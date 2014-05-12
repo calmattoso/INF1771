@@ -28,10 +28,14 @@ end
 for line in io.lines("items.log") do 
 	_,_,x,y,item_tmp = string.find(line, "(%d+)%s(%d+)%s(%a)")
 	if item_temp =="B" or item_temp =="E" or item_temp =="V" then 
-		io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x+1,y+1)) 
-		io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x+1,y-1)) 
-		io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x-1,y+1)) 
-		io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x-1,y-1)) 
+			if x < 42 then
+				if y < 42 then io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x+1,y+1)) end
+				if x>0 then io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x+1,y-1)) end
+			end
+			if x>0 then
+				if y < 42 then io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x-1,y+1)) end
+				if x>0 then io.write(string.format("%s(%s,%s).\n",sensor_id[item_tmp],x-1,y-1)) end
+			end
 	else 
 		io.write(string.format("at(%s,pos(%s,%s)).\n",sensor_id[item_tmp],x,y))
 	end
