@@ -21,7 +21,6 @@
 *.app
 
 # Log files
-.log
 .out
 
 # Ppt
