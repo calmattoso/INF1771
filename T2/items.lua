@@ -58,7 +58,7 @@ function create(item, num)
 end
 
 math.randomseed(os.time())
-io.output("items.log")
+io.output("logs/items.log")
 create(1,50) -- "rupee"
 create(2,30) -- "heart"
 create(3,30) -- "sword"

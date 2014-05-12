@@ -1,5 +1,5 @@
 
-function read_map(path,id)
+function read_map(path)
 file = io.open(path)
 text = file:read("*all")
 file:close(path)
