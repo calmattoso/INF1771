@@ -1,20 +1,38 @@
+require("readmap")
+
 seq = {}
 path = "../logs/solution.log"
 
 --for a_star:
-map = read_map() 
-link_x =
-link_y = 
+map = read_map("terreno.txt") 
+--link_x =
+--link_y = 
 
 function parse(line)
   _line = {}
-  _,_,_line.action,_line.content,_line.x,_line.y = string.find(line, "(%a+)\((%d+),(%d+),(%d+)\)")
+  _,_,_line.action,_line.content,_line.x,_line.y = string.find(line, "(%a+)((%d+),(%d+),(%d+))")
   return _line
+end
+
+function exists( table, action,x,y )
+  for e in table do
+    if e.action == action and e.x == x and e.y == y then
+      return true
+    end
+  end
+  return false
+end
+
+function insert( action, x, y )
+  --http://www.lua.org/pil/13.1.html
+  if action == "safe" or action == "actual_danger" or action == "potential_danger" and not exists(seq,action,x,y) then
+    table.insert(seq,{["action"] = action,["x"] = x,["y"] = y})
+  end
 end
 
 function a_star(line)
 
-  table.insert(seq,{"move",x,y})
+  insert("move",x,y)
 end
 
 for line in io.lines(path) do 
@@ -22,29 +40,27 @@ for line in io.lines(path) do
   -- usar http://lua-users.org/wiki/SwitchStatement ?
   if _line.action == "move_to" then
     if item[link_x][link_y] == "vortex" then
-      table.insert(seq,{"teleport",_line.x,_line.y})
+      insert("teleport",_line.x,_line.y)
     else  
       a_star(_line.x,_line.y) 
+    end
   end
 
   if _line.action == "actual_danger" or _line.action == "item" then
-    table.insert(seq,{_line.content,_line.x,_line.y})
+    insert(line.content,_line.x,_line.y)
   end
 
   if _line.action == "won" or _line.action == "dead" then
-    table.insert(seq,{_line.action,_line.x,_line.y})
+    insert(line.action,_line.x,_line.y)
     break
   end
 
-  if  then
-    table.insert(seq,{"danger",_line.x,_line.y})
-  end
   if _line.action == "pickup_item" then
-    table.insert(seq,{_line.content,_line.x,_line.y})
+    insert(line.content,_line.x,_line.y)
   end 
 
   if _line.action == "attack_monster" or _line.action == "potential_danger" or _line.action == "safe"then
-    table.insert(seq,{_line.action,_line.x,_line.y})
+    insert(line.action,_line.x,_line.y)
   end  
 
 end

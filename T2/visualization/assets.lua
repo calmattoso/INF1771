@@ -15,19 +15,31 @@ local le  = love.graphics.newImage( basedir.."le.png")
 local ld  = love.graphics.newImage( basedir.."ld.png")
 
 logo = love.graphics.newImage(basedir.."bg.png")
-chest_c = love.graphics.newImage(basedir.."chest_c.png")
-chest_o = love.graphics.newImage(basedir.."chest_o.png")
+
 anims = {}
     anims.baixo = newAnimation(lb, 32.5, 35, 0.1, 6)
     anims.cima = newAnimation(lc, 32.5, 35, 0.1, 6)
     anims.esq = newAnimation(le, 33, 31, 0.1, 6)
     anims.dir = newAnimation(ld, 34, 32, 0.1, 6)
-    
-assetsTiles = love.graphics.newImage( basedir.."tiles2.png" )
+--TODO anim monster
+assetsTiles = love.graphics.newImage( basedir.."tiles2.png" ) 
+--[[
+monster = love.graphics.newImage(basedir.."monster.png")
+hole = love.graphics.newImage(basedir.."hole.png")
+vortex = love.graphics.newImage(basedir.."vortex.png")
+
+heart = love.graphics.newImage(basedir.."heart.png")
+rupee = love.graphics.newImage(basedir.."rupee.png")
+sword = love.graphics.newImage(basedir.."sword.png")
+--]]
+monster = love.graphics.newImage(basedir.."chest_o.png")
+hole = love.graphics.newImage(basedir.."chest_o.png")
+vortex = love.graphics.newImage(basedir.."chest_o.png")
+
+heart = love.graphics.newImage(basedir.."chest_o.png")
+rupee = love.graphics.newImage(basedir.."chest_o.png")
+sword = love.graphics.newImage(basedir.."chest_o.png")
 
 song = {}
-song[1] = basedir.."song.mp3"
-song[2] = basedir.."dun1.mp3"
-song[3] = basedir.."dun1.mp3"
-song[4] = basedir.."dun1.mp3"
+song[1] = basedir.."song.mp3" --TODO music lost woods
 song_item = basedir.."item.mp3"
