@@ -21,7 +21,7 @@ for x=1,#map do
 	end
 end
 for line in io.lines("items.log") do 
-	_,_,x,y,item_tmp = string.find(line, "(.+)%s(.+)%s(.)")
+	_,_,x,y,item_tmp = string.find(line, "(%d+)%s(%d+)%s(%a)")
 	if item_temp =="B" or item_temp =="E" or item_temp =="V" then 
 		io.write(string.format("%s(%s,%s).",sensor_id[item_tmp],x+1,y+1)) 
 		io.write(string.format("%s(%s,%s).",sensor_id[item_tmp],x+1,y-1)) 
