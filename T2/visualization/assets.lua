@@ -23,7 +23,7 @@ anims = {}
     anims.dir = newAnimation(ld, 34, 32, 0.1, 6)
 --TODO anim monster
 assetsTiles = love.graphics.newImage( basedir.."tiles2.png" ) 
---[[
+
 monster = love.graphics.newImage(basedir.."monster.png")
 hole = love.graphics.newImage(basedir.."hole.png")
 vortex = love.graphics.newImage(basedir.."vortex.png")
@@ -31,14 +31,6 @@ vortex = love.graphics.newImage(basedir.."vortex.png")
 heart = love.graphics.newImage(basedir.."heart.png")
 rupee = love.graphics.newImage(basedir.."rupee.png")
 sword = love.graphics.newImage(basedir.."sword.png")
---]]
-monster = love.graphics.newImage(basedir.."chest_o.png")
-hole = love.graphics.newImage(basedir.."chest_o.png")
-vortex = love.graphics.newImage(basedir.."chest_o.png")
-
-heart = love.graphics.newImage(basedir.."chest_o.png")
-rupee = love.graphics.newImage(basedir.."chest_o.png")
-sword = love.graphics.newImage(basedir.."chest_o.png")
 
 song = {}
 song[1] = basedir.."song.mp3" --TODO music lost woods
