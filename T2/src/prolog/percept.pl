@@ -36,19 +36,6 @@
 
   % ----------------------------------------------------------------------------
   %  Description
-  %    Infers the agent has picked up the real Master Sword, so the game`s over.
-  %
-  %  Returns
-  %    - Command that informs the game`s been won.
-  % ----------------------------------------------------------------------------
-
-    sense( asserta( has_won ) ) :-
-      at(agent ,   Pos),
-      at(master_sword , Pos),
-      not(at(sword,Pos)).
-
-  % ----------------------------------------------------------------------------
-  %  Description
   %    Infers that there is a (genuine or fake) Master Sword at (X,Y).
   % 
   %  Effects 
@@ -62,6 +49,19 @@
       at( agent , pos(X,Y) ),
       at( pendants_glow , pos(X,Y) ),
         retract( at( pendants_glow , pos(X,Y) )).
+
+  % ----------------------------------------------------------------------------
+  %  Description
+  %    Infers the agent has picked up the real Master Sword, so the game`s over.
+  %
+  %  Returns
+  %    - Command that informs the game`s been won.
+  % ----------------------------------------------------------------------------
+
+    sense( asserta( has_won ) ) :-
+      at(agent ,   Pos),
+      at(master_sword , Pos),
+      not(at(sword,Pos)).
 
   % ----------------------------------------------------------------------------
   %  Description
