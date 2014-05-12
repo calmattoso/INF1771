@@ -11,12 +11,16 @@
  	  	item/1,
  	  	safe/1,
  	  	energy/2,
+ 	  	has_won/0,
  	  	is_dead/0,
  	  	adjust_safe/0,
  	  	mark_unsafe/0,
  	  	is_adjacent/2,
  	  	get_adjacent/3,
- 	  	sensed/1
+ 	  	get_adjacent_list/3,
+ 	  	sensed/2,
+ 	  	on_vortex/0,
+ 	  	check_local/0
  	  ]).
 
 	:- dynamic 
@@ -24,7 +28,9 @@
 		visited/1,
 		safe/1,
 		energy/2,
-		sensed/1.
+		sensed/2,
+		on_vortex/0,
+		has_won/0.
 
 % ------------------------------------------------------------------------------
 %
@@ -60,6 +66,25 @@
 			at( agent , Pos ),
 			get_adjacent( _ , NewPos , Pos) , NewPos , 
 			( not(safe( NewPos )), assertz(safe(NewPos))).
+
+	% ----------------------------------------------------------------------------
+	%  Description
+	%    Corrects the agent`s knowledge about its current position.
+	% ----------------------------------------------------------------------------
+
+		check_local :-
+			at( agent , Pos ),
+			( update_danger_inferences( 
+					Pos , vortex , actual_vortex , potencial_vortex
+				);
+			  true),
+			( update_danger_inferences( Pos , hole , actual_hole , potencial_hole );
+			  true),
+			( update_danger_inferences( 
+					Pos , monster , actual_monster , potencial_monster 
+				);
+			  true).  			 		
+
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -111,42 +136,86 @@
 	% ----------------------------------------------------------------------------
 
 		% Vortex %
-			test_unsafe( spatial_distortion , Pos ) :-				
+			test_unsafe( spatial_distortion , Pos ) :-
 				at( spatial_distortion , Pos ),
 					retract( at(spatial_distortion , Pos)),
-				bagof( AdjPos , get_adjacent(_, AdjPos , Pos ), [Head]),
-					not( safe( Head )), (
-						( not(at(potencial_vortex , Head)), 
-							assertz(at(potencial_vortex , Head)) );
-						( retract(at(potencial_vortex , Head)) ,
-							assertz(at(vortex , Head)) )
-					).
-
+				get_adjacent_list( _ , Pos , [Head|Tail]),
+					(
+						( length(Tail , 0) ,
+							assertz( at(actual_vortex, Head) ));
+						iterate_adjacent_list( potential_vortex , actual_vortex , Tail )
+					).	
 		
 		% Monster %
 			test_unsafe( noises , Pos ) :-
 				at( noises , Pos ),
 					retract( at(noises , Pos)),
-				bagof( AdjPos , get_adjacent(_, AdjPos , Pos ), [Head]),
-					not( safe( Head )), (
-						( not(at(potencial_monster , Head)), 
-							assertz(at(potencial_monster , Head)) );
-						( retract(at(potencial_monster , Head)) ,
-							assertz(at(monster , Head)) )
+				get_adjacent_list( _ , Pos , [Head|Tail]),
+					(
+						( length(Tail , 0) ,
+							assertz( at(actual_monster, Head) ));
+						iterate_adjacent_list( potential_monster , actual_monster , Tail )
 					).	
 
 		% Hole %
 			test_unsafe( breeze , Pos ) :-
 				at( breeze , Pos ),
 					retract( at(breeze , Pos)),
-				bagof( AdjPos , get_adjacent(_, AdjPos , Pos ), [Head]),
-					not( safe( Head )), (
-						( not(at(potencial_hole , Head)), 
-							assertz(at(potencial_hole , Head)) );
-						( retract(at(potencial_hole , Head)) ,
-							assertz(at(hole , Head)) )
-					).	
+				get_adjacent_list( _ , Pos , [Head|Tail]),
+					(
+						( length(Tail , 0) ,
+							assertz( at(actual_hole, Head) ));
+						iterate_adjacent_list( potential_hole , actual_hole , Tail )
+					).
 
+	% ----------------------------------------------------------------------------
+	%  Description
+	%    Generates and returns list L with all, not known to be safe, adjacent 
+	%		   positions to Pos.
+	% ----------------------------------------------------------------------------
+
+		get_adjacent_list( Direction , Pos , L ) :-
+			findall( AdjPos , 
+				(get_adjacent( Direction , AdjPos , Pos ), not(safe(AdjPos)) ),
+				L
+			).
+
+	% ----------------------------------------------------------------------------
+	%  Description
+	%    Iterates through a list of positions and mark each one with 
+	%		   PotencialDanger or Danger, depending on previous knowledge about given
+	%			 position.
+	%    We assume, after detecting a second potential danger of same type at 
+	%		   Head that there probably is something there.
+	% ----------------------------------------------------------------------------
+		
+		iterate_adjacent_list( _ , _ , [] ).
+		iterate_adjacent_list( PotencialDanger , Danger , [Head|Tail]) :-
+			(
+				( not(at( PotencialDanger , Head)), 
+					assertz(at(PotencialDanger , Head)) );
+				( retract(at(PotencialDanger , Head)) ,
+					assertz(at(Danger , Head)) )
+			), iterate_adjacent_list( PotencialDanger, Danger, Tail).
+
+	% ----------------------------------------------------------------------------
+	%  Description
+	%	   Updates the agent`s knowledge about its current position.
+	%	
+	%	 Effects
+	%		
+	% ----------------------------------------------------------------------------	
+		
+		update_danger_inferences( Pos , Danger , ActDanger , PotDanger ) :- 
+			(at( Danger , Pos ),
+				(( not(at(ActDanger,Pos)), asserta(at(ActDanger,Pos)) ); true),
+				( at(PotDanger,Pos), retract(at(PotDanger,Pos)))
+			);
+			( not(at( Danger , Pos )),
+					( ( not(safe(Pos)), asserta(safe(Pos)) ); true),
+					( at(ActDanger,Pos), retract(at(ActDanger,Pos)) );
+					( at(PotDanger,Pos), retract(at(PotDanger,Pos)) )
+			).
 
 
 % ------------------------------------------------------------------------------
@@ -203,7 +272,7 @@
 	%  Initial state of the agent.
 	% ----------------------------------------------------------------------------
 
-		safe( pos( 21 , 38 ) ).
+		safe( pos( 22 , 39 ) ).
 		visited( pos(21 , 38) ).		
 		energy( agent , 100 ).
 
