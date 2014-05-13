@@ -144,7 +144,7 @@ header = [[
 					(
 						( length(Tail , 0) ,
 							assertz( at(actual_vortex, Head) ));
-						iterate_adjacent_list( potential_vortex , actual_vortex , Tail )
+						iterate_adjacent_list( potential_vortex , actual_vortex , [Head|Tail] )
 					).	
 		
 		% Monster %
@@ -155,7 +155,7 @@ header = [[
 					(
 						( length(Tail , 0) ,
 							assertz( at(actual_monster, Head) ));
-						iterate_adjacent_list( potential_monster , actual_monster , Tail )
+						iterate_adjacent_list( potential_monster , actual_monster , [Head|Tail] )
 					).	
 
 		% Hole %
@@ -166,7 +166,7 @@ header = [[
 					(
 						( length(Tail , 0) ,
 							assertz( at(actual_hole, Head) ));
-						iterate_adjacent_list( potential_hole , actual_hole , Tail )
+						iterate_adjacent_list( potential_hole , actual_hole ,[Head|Tail])
 					).
 
 	% ----------------------------------------------------------------------------
@@ -179,7 +179,7 @@ header = [[
 			findall( AdjPos , 
 				(get_adjacent( Direction , AdjPos , Pos ), not(safe(AdjPos)) ),
 				L
-			).
+			),!.
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -197,7 +197,7 @@ header = [[
 					assertz(at(PotencialDanger , Head)) );
 				( retract(at(PotencialDanger , Head)) ,
 					assertz(at(Danger , Head)) )
-			), iterate_adjacent_list( PotencialDanger, Danger, Tail).
+			), iterate_adjacent_list( PotencialDanger, Danger, Tail),!.
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -238,7 +238,7 @@ footer = [[
 	%  Definition of the agent.
 	% ----------------------------------------------------------------------------
 
-		at( agent , pos(20 , 37) ). % Agent starts here %
+		at( agent , pos(21 , 38) ). % Agent starts here %
 
 	% ----------------------------------------------------------------------------
 	%  Valid items.
@@ -252,8 +252,8 @@ footer = [[
 	%  Initial state of the agent.
 	% ----------------------------------------------------------------------------
 
-		safe( pos( 20 , 37 ) ).
-		visited( pos(20 , 37) ).		
+		safe( pos( 21 , 38) ).
+		visited( pos(21 , 38) ).		
 		energy( agent , 100 ).
 
 
