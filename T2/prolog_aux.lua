@@ -228,17 +228,10 @@ footer = [[
 % ------------------------------------------------------------------------------
 
 	% ----------------------------------------------------------------------------
-	%  Definition of where entities are on the map.
+	%  Definition of the agent.
 	% ----------------------------------------------------------------------------
 
-		at( agent , pos(22 , 39) ). % Agent starts here %
-		at( spatial_distortion , pos(22,39)).
-		at( breeze , pos(22,39)).
-		at( noises , pos(22,39)).
-
-		at( rupee_glow , pos(21 , 38) ).
-		at( fairies , pos(22, 39) ).
-		at( pendants_glow , pos( 20 , 38 )).
+		at( agent , pos(20 , 37) ). % Agent starts here %
 
 	% ----------------------------------------------------------------------------
 	%  Valid items.
@@ -252,10 +245,9 @@ footer = [[
 	%  Initial state of the agent.
 	% ----------------------------------------------------------------------------
 
-		safe( pos( 22 , 39 ) ).
-		visited( pos(21 , 38) ).		
+		safe( pos( 20 , 37 ) ).
+		visited( pos(20 , 37) ).		
 		energy( agent , 100 ).
-
 
 
 ]]

@@ -128,6 +128,7 @@
   % ----------------------------------------------------------------------------
 
     sense( check_local ) :-
+      at( agent , Pos ),
       not( sensed( Pos , local)),
         asserta( sensed( Pos , local) ).
 
