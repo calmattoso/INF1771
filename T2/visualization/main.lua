@@ -42,13 +42,14 @@ for x=1,#map do
     end 
   end
 end
+
 -- fog = 0 => safe
 -- fog = 1 => danger
 -- fog = 2 => unknown
 
 
-link.initial_x = 0
-link.initial_y = 0
+link.initial_x = 22
+link.initial_y = 39
 
 
 loadtiles(t)
@@ -68,7 +69,8 @@ loadtiles(t)
     Sn = 1
     Sm = 1
     cost = 0
-    step = 0.2
+    energy = 100
+    step = 0.01
     temp_step = step
     started = false
     press_text = false
@@ -80,7 +82,7 @@ updatemap(map,fog)
     
 
 TEsound.play(song,"")
-    
+
 end
 
 function update_view(dt)
@@ -98,7 +100,7 @@ end
 function love.update(dt)
  
   if started then
-	  --update_view(dt)
+	  update_view(dt)
   	link.anim:update(dt)
   else
 	if T>step then 
@@ -109,7 +111,7 @@ function love.update(dt)
   end
 TEsound.cleanup()
 end
---TODO
+
 function get_way(x,y)
   if x == link.x then
     if y > link.y then 
@@ -142,99 +144,68 @@ function effect(item)
 end
 
 function exists( table, action,x,y )
-  for e in table do
+  for a,e in pairs(table) do
     if e.action == action and e.x == x and e.y == y then
-      return true
+      return a
     end
   end
   return false
 end
 
 function action(todo)
-
-if todo.action == "move" then   
-  new_way = get_way(todo.x,todo.y)
-  if way ~= new_way then --TODO if turn 180 decrease 2
-    way = new_way
+  if todo.action == "move" then   
+    new_way = get_way(todo.x,todo.y)
+    if way ~= new_way then --TODO if turn 180 decrease 2
+      way = new_way
+      cost = cost - 1
+    end
+    move(way)
     cost = cost - 1
   end
-  move(way)
-  cost = cost - 1
-end
-if todo.action == "teleport" then   
- link.x = todo.x
- link.y = todo.y
-end
-if todo.action == "monster" or todo.action == "vortex" or todo.action == "hole" then
-  table.insert(dangers,todo)
-end 
-if todo.action == "rupee" or todo.action == "sword" or todo.action == "heart" then
-  if exists(items,todo.action,todo.x,todo.y) then 
-    effect(todo.action)
-    table.remove(items,todo) 
-  else
-    table.insert(items,todo)
+  if todo.action == "teleport" then   
+   link.x = todo.x
+   link.y = todo.y
+  end
+  if todo.action == "monster" or todo.action == "vortex" or todo.action == "hole" then
+    table.insert(dangers,todo)
+  end 
+  if todo.action == "rupee" or todo.action == "sword" or todo.action == "heart" then
+    pos = exists(items,todo.action,todo.x,todo.y)
+    if pos then 
+      effect(todo.action)
+      table.remove(items,pos)
+    else
+      table.insert(items,todo)
+    end
+  end
+  if todo.action == "safe" then 
+    fog[todo.x][todo.y] = 0
+    updatemap(map,fog)
+  end
+  if todo.action == "potential_danger" then
+    fog[todo.x][todo.y] = 1
+    updatemap(map,fog)
+  end
+  if todo.action == "won" then
+    win = true
+  end
+  if todo.action == "dead" then
+    --game over
+  end
+
+  if todo.action == "attack_monster" then 
+    --animacao de atacar(get_way(x,y))
+    energy = energy - 10
+    cost = cost - 5
+    pos = exists(dangers,"monster",todo.x,todo.y)
+    table.remove(dangers,pos)
   end
 end
-if todo.action == "safe" then 
-  fog[todo.x][todo.y] = 0
-end
-if todo.action == "potential_danger" then
-  fog[todo.x][todo.y] = 1
-end
-if todo.action == "won" then
-  win = true
-end
-if todo.action == "dead" then
-  --game over
-end
-
--- attack_monster 
-  --animacao de atacar(get_way(x,y))
-  --muda o mapa(deleta monstro)
-  --energy -= 10
-  --custo
--- Pegar item
-  --ve ql o item , faz efeito (rupee, heart, sword) 
-  --animacao e tocar musica
-  --e muda o mapa(deleta item)
-  -- energy += 50
-  --custo
-
-if actual ~= 1 then --dungeon
-     if link.x/t == gates[actual][1].x and link.y/t == gates[actual][1].y then --item
-      temp_step = step
+--[[      temp_step = step
       step = 2
       TEsound.play(song_item)
-      item[actual].value = cost
-      link.x = link.x
-     else  
-      TEsound.stop("dun")
-      actual = 1
-      TEsound.play(song[1],"world")
-      updateTilesetBatch(maps[actual],gates[actual])
-      link.x = old_link_x
-      link.y = old_link_y
-    end
-  else --mapa
-       old_link_x = link.x
-      old_link_y = link.y
-      for i=1, #gates[actual] do
-	--print(link.x/t,gates[actual][i].x)
-	--print(link.y/t,gates[actual][i].y)
-        if link.x/t == gates[actual][i].x and link.y/t == gates[actual][i].y then
-            actual = 1 + gates[actual][i].dest--change map
-  	    updateTilesetBatch(maps[actual],gates[actual])
-	    print("actual:"..actual)
-            TEsound.stop("world")
-	    TEsound.playLooping(song[actual],"dun")
-            link.x = t*(gates[actual][2].x)
-            link.y = t*(gates[actual][2].y)
-            break
-	end
-      end
-  end	
-end
+     --]]
+
 
 
 function move(way)
@@ -260,27 +231,27 @@ end
 danger_icon = {["monster"] = monster,["hole"] = hole,["vortex"] = vortex}
 
 function draw_dangers()
-  for danger in dangers do
-    love.graphics.draw(danger_icon[danger.action],(danger.x+1)*t,danger.y*t)
+  for _,danger in pairs(dangers) do
+    love.graphics.draw(danger_icon[danger.action],(danger.x)*t,danger.y*t,0,t/30,t/30)
   end
 end
 
 item_icon = { ["rupee"] = rupee, ["heart"] = heart, ["sword"] = sword }
 function draw_items()
-  for item in items do
-    love.graphics.draw(item_icon[item.action],(item.x+1)*t,item.y*t)
+  for _,item in pairs(items) do
+    love.graphics.draw(item_icon[item.action],item.x*t,item.y*t,0,t/30,t/30)
   end
 end
 
 function love.draw()
   if started then
    love.graphics.draw(tilesetmap)
-   --draw_dangers()
-   --draw_items()
+   draw_dangers()
+   draw_items()
    draw_link()
-   love.graphics.draw(logo,(n+1)*t,5*t,0,0.01*t,0.01*t)
-   love.graphics.print("cost: "..cost,(n+1)*t,15*t)
-   love.graphics.print("energy: "..cost,100+(n+1)*t,15*t)
+   love.graphics.draw(logo,(n+2)*t,5*t,0,0.01*t,0.01*t)
+   love.graphics.print("cost: "..cost,(n+2)*t,15*t)
+   love.graphics.print("energy: "..energy,100+(n+2)*t,15*t)
 
 
     if win == true then 
