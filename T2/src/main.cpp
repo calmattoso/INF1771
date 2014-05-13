@@ -29,14 +29,14 @@ int main( )
   ofstream log_prolog("../logs/prolog.log"),
            log_vis("../logs/vis.log");
   string dangerCodes[6] = {
-    "potencial_monster", "potencial_hole", "potencial_vortex",
+    "potential_monster", "potential_hole", "potential_vortex",
     "actual_monster", "actual_hole", "actual_vortex" 
   };
 
   if( !log_vis.is_open() 
-#ifdef _LOG_PROLOG
+    #ifdef _LOG_PROLOG
       && !log_prolog.is_open() 
-#endif
+    #endif
   ){
     cout << "Could not open log files! Terminating...\n";
     exit(1);
@@ -144,9 +144,9 @@ int main( )
       }    
   }
 
-#ifdef _LOG_PROLOG
+  #ifdef _LOG_PROLOG
   log_prolog.close();
-#endif
+  #endif
   log_vis.close();
 
   return 0;
@@ -184,7 +184,7 @@ void check_danger(string dangerCode , ofstream& log)
   PlQuery query("at", term);
 
   string hint = "actual_danger(";
-  if( dangerCode.find("potencial") != string::npos )
+  if( dangerCode.find("potential") != string::npos )
   {
     hint = "potential_danger(";
   }
