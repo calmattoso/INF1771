@@ -13,57 +13,14 @@
 
 using namespace std;
 
-void adjust_string(string& str, string hint)
-{
-
-  /* Move */
-    if(str.find("move(") != string::npos)
-      str = "move_to(void," + str.substr(5, string::npos);
-
-  /* Attack monster */
-    else if(str.find("attack_monster(") != string::npos)
-      str = "attack_monster(void," + str.substr(15, string::npos);
-
-  /* We receive simply a position, adjust it to safe */
-    else if(str.find("pos(") != string::npos)
-        str = hint + "(void," + str.substr(4, string::npos);
-
-  /* Game Won */
-    else if( str == "won" )
-      str = "won(void,void,void)";
-
-  /* Game Lost */
-    else if( str == "like_omg_dead")
-      str = "dead(void,void,void)";
-}
-
-void check_danger(string dangerCode , ofstream& log)
-{
-  PlTermv term(2);
-  term[0] = PlCompound( dangerCode.c_str() );
-  PlQuery query("at", term);
-
-  string hint = "actual_danger";
-  if( dangerCode.find("potencial") != string::npos )
-  {
-    hint = "potential_danger";
-  }
-
-  while( query.next_solution() )
-  {
-    string pos( ( char* )(term[1]) ); 
-
-    adjust_string( pos , hint );
-
-    log << pos << "\n";
-  }
-}
+void adjust_string(string& str, string hint);
+void check_danger(string dangerCode , ofstream& log);
 
 int main( )
 {
   char * argv[] = {
     "libswipl.dll",
-    "-s", "prolog\\run.pl",
+    "-s", "..\\src\\prolog\\run.pl",
     "-q",
     NULL
   };
@@ -103,7 +60,7 @@ int main( )
 
       #ifdef _LOG_PROLOG
           log_prolog << "sense(X)\n" << "  X = " << senseOutcome << "\n";
-          log_prolog << senseOutcome << "\n";
+          log_prolog << senseOutcome << ".\n";
       #endif
 
         /* destroy the query and term */
@@ -131,7 +88,7 @@ int main( )
         {
           string safePos( (( char* ) (*safeTerm)[0]) );
 
-          adjust_string( safePos , "safe" );
+          adjust_string( safePos , "safe(void," );
 
           log_vis << safePos << "\n";
         }
@@ -196,4 +153,57 @@ int main( )
 }
 
 
+void adjust_string(string& str, string hint)
+{
 
+  /* Move */
+    if(str.find("move(") != string::npos)
+      str = "move_to(void," + str.substr(5, string::npos);
+
+  /* Attack monster */
+    else if(str.find("attack_monster(") != string::npos)
+      str = "attack_monster(void," + str.substr(15, string::npos);
+
+  /* We receive simply a position, adjust it to safe */
+    else if(str.find("pos(") != string::npos)
+        str = hint +  str.substr(4, string::npos);
+
+  /* Game Won */
+    else if( str == "won" )
+      str = "won(void,void,void)";
+
+  /* Game Lost */
+    else if( str == "like_omg_dead")
+      str = "dead(void,void,void)";
+}
+
+void check_danger(string dangerCode , ofstream& log)
+{
+  PlTermv term(2);
+  term[0] = PlCompound( dangerCode.c_str() );
+  PlQuery query("at", term);
+
+  string hint = "actual_danger(";
+  if( dangerCode.find("potencial") != string::npos )
+  {
+    hint = "potential_danger(";
+  }
+
+  if( dangerCode.find("monster") != string::npos )
+    dangerCode = "monster";
+  else if( dangerCode.find("vortex") != string::npos )
+    dangerCode = "vortex";
+  else
+    dangerCode = "hole";
+
+  hint = hint + dangerCode + ",";
+
+  while( query.next_solution() )
+  {
+    string pos( ( char* )(term[1]) ); 
+
+    adjust_string( pos , hint );
+
+    log << pos << "\n";
+  }
+}
