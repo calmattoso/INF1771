@@ -23,11 +23,11 @@ io.write(header)
 for x=1,#map do
 	for y=1,#map[1] do
  		if map[x][y] == 1 then 
- 			io.write(string.format("pos(%s,%s).\n",x,y)) 
+ 			io.write(string.format("pos(%s,%s).\n",y,x)) 
  		end
 	end
 end
-for line in io.lines("items.log") do 
+for line in io.lines("data/items.txt") do 
 	_,_,y,x,item_tmp = string.find(line, "(%d+)%s(%d+)%s(%a)")
 	y = y + 1
 	x = x + 1
