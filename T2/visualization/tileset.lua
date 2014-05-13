@@ -24,9 +24,9 @@ function updatemap(map,fog)
   for x=1, #map do
     for y=1, #map[x] do
       if fog[x][y] > 0 then
-        tilesetmap:add(tileQuads[fog[x][y]+2], (y-1)*t, (x-1)*t,0,t/30,t/30)
+        tilesetmap:add(tileQuads[fog[x][y]+2], (y)*t, (x)*t,0,t/30,t/30)
       else
-	      tilesetmap:add(tileQuads[map[x][y]], (y-1)*t, (x-1)*t,0,t/30,t/30)--cell
+	      tilesetmap:add(tileQuads[map[x][y]], (y)*t, (x)*t,0,t/30,t/30)--cell
       end
     end
   end
