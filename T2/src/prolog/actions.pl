@@ -101,9 +101,9 @@
 	% ----------------------------------------------------------------------------
 
 		best_action( move( ToX , ToY ) ) :-
-			pos( ToX , ToY ),
 			at( agent , pos(FromX , FromY) ),
-			is_adjacent( pos(FromX , FromY), pos( ToX , ToY )),
+			pos( ToX, ToY ),
+			is_adjacent(pos( ToX , ToY ), pos(FromX , FromY)),
 				not( visited( pos(ToX, ToY) )),
 				can_move( FromX , FromY , ToX , ToY),
 				check_complete_sensing(FromX,FromY),
@@ -116,8 +116,8 @@
 	% ----------------------------------------------------------------------------
 
 		best_action( move( ToX , ToY ) ) :-
-			pos( ToX , ToY ),
 			at( agent , pos(FromX , FromY) ),
+				pos( ToX , ToY ),
 				not( visited( pos(ToX, ToY) )),
 				can_move( FromX , FromY , ToX , ToY),
 				check_complete_sensing(FromX,FromY),
