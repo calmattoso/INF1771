@@ -12,7 +12,7 @@ local j = 1
 map[i] = {}
 text = text:gsub("%s+","")
 for l in string.gmatch(text, "%l") do
-  if l == "f" then
+  if l == "g" then
   	map[i][j] = 1
   else 
   	map[i][j] = 2
