@@ -149,23 +149,14 @@
 	%      some vortex instead.
 	% ----------------------------------------------------------------------------
 
-		% Move next to where we strongly believe there`s a monster
+		% Move next to where we believe there`s a monster
 			best_action( move( ToX , ToY ) ) :-
 				at( agent , pos(FromX , FromY)),
-				at( actual_monster, pos(Mx,My)),!,
+				(at( actual_monster, pos(Mx,My)),!;
+				at( potential_monster, pos(Mx,My)),!),
 				pos( ToX , ToY ),
 					is_adjacent( pos(ToX,ToY), pos(Mx,My)),
-					safe( pos(ToX , ToY) ),!,
-					can_move( FromX , FromY , ToX , ToY),
-					check_complete_sensing(FromX,FromY).
-
-		% Move next to where we think there might be a monster
-			best_action( move( ToX , ToY ) ) :-
-				at( agent , pos(FromX , FromY)),
-				at( potential_monster, pos(Mx,My)),!,
-				pos( ToX , ToY ),
-					is_adjacent( pos(ToX,ToY), pos(Mx,My)),
-					safe( pos(ToX , ToY) ),!,
+					visited( pos(ToX , ToY) ),!,
 					can_move( FromX , FromY , ToX , ToY),
 					check_complete_sensing(FromX,FromY).
 
@@ -180,8 +171,9 @@
 		% Move to some pending position
 			best_action( move( ToX , ToY ) ) :-
 				at( agent , pos(FromX , FromY)),
-				check_complete_sensing(FromX,FromY),
-				should_visit( pos(ToX,ToY) ).
+					check_complete_sensing(FromX,FromY),
+				should_visit( pos(ToX,ToY) ),
+				pos(ToX,ToY).
 
 
 	% ----------------------------------------------------------------------------
@@ -199,8 +191,14 @@
 			at( agent, pos(FromX , FromY) ),
 				retract( at( agent , pos(FromX , FromY) )),
 				asserta( at( agent , pos(ToX, ToY) )),
-				assertz( visited( pos(ToX , ToY) )),
-				retract( should_visit(pos( ToX , ToY)) ).
+			((
+				not( visited(pos(ToX,ToY))),
+				assertz( visited( pos(ToX , ToY) ))
+			); true),
+			((
+				should_visit(pos( ToX , ToY)),
+				retract( should_visit(pos( ToX , ToY)) )
+			); true).
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -238,12 +236,10 @@
 	
 		% Strong belief of monster at (X,Y)	 
 			attack_monster( X , Y ) :-
-				at( agent   , pos(Xg , Yg) ),
 				at( actual_monster , pos(X,Y) ),
-				is_adjacent(pos(Xg,Yg), pos(X,Y)),!,
 					retract( at( actual_monster, pos(X,Y) )),
 					(retract( at( potential_monster, pos(X,Y) )); true),
-					((no_dangers(pos(X,Y)) , asserta( safe( pos(X,Y))) );true),
+					(( no_dangers(pos(X,Y)), asserta( safe( pos(X,Y))) );true),
 					((at(monster,pos(X,Y)),
 						retract( at( monster, pos(X,Y)))); 
 					true),
@@ -251,12 +247,10 @@
 
 		% Weak belief of potential monster at (X,Y)
 			attack_monster( X , Y ) :-
-				at( agent   , pos(Xg , Yg) ),
 				at( potential_monster , pos(X,Y) ),
-				is_adjacent(pos(Xg,Yg), pos(X,Y)),!,
 					retract( at( potential_monster, pos(X,Y) )),
 					(retract( at( actual_monster, pos(X,Y) )); true),
-					((no_dangers(pos(X,Y)) , asserta( safe( pos(X,Y))) );true),
+					(( no_dangers(pos(X,Y)), asserta( safe( pos(X,Y))) );true),
 					((at(monster,pos(X,Y)),
 						retract( at( monster, pos(X,Y)))); 
 					true),

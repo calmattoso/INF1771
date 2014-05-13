@@ -1695,8 +1695,8 @@ at(vortex,pos(5,13)).
 	%  Initial state of the agent.
 	% ----------------------------------------------------------------------------
 
-		safe( pos( 21 , 38)).
-		visited( pos(21 , 38)).		
+		safe( pos( 21 , 38) ).
+		visited( pos(21 , 38) ).		
 		energy( agent , 100 ).
 
 
