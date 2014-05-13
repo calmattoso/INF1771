@@ -1,21 +1,21 @@
 require("readmap")
 
 seq = {}
-path = "../logs/solution.log"
+path = "../logs/vis.log"
 
 --for a_star:
-map = read_map("terreno.txt") 
+map = read_map("../data/map.txt") 
 --link_x =
 --link_y = 
 
 function parse(line)
-  _line = {}
-  _,_,_line.action,_line.content,_line.x,_line.y = string.find(line, "(%a+)((%d+),(%d+),(%d+))")
+  local _line = {}
+  _,_,_line.action,_line.content,_line.x,_line.y = string.find(line, "(%a+).(%a+).(%d+).(%d+).")
   return _line
 end
 
 function exists( table, action,x,y )
-  for e in table do
+  for _,e in pairs(table) do
     if e.action == action and e.x == x and e.y == y then
       return true
     end
@@ -25,7 +25,11 @@ end
 
 function insert( action, x, y )
   --http://www.lua.org/pil/13.1.html
-  if action == "safe" or action == "actual_danger" or action == "potential_danger" and not exists(seq,action,x,y) then
+  if action == "safe" or action == "actual_danger" or action == "potential_danger" then
+    if not exists(seq,action,x,y) then
+      table.insert(seq,{["action"] = action,["x"] = x,["y"] = y})
+    end
+  else
     table.insert(seq,{["action"] = action,["x"] = x,["y"] = y})
   end
 end
@@ -47,20 +51,20 @@ for line in io.lines(path) do
   end
 
   if _line.action == "actual_danger" or _line.action == "item" then
-    insert(line.content,_line.x,_line.y)
+    insert(_line.content,_line.x,_line.y)
   end
 
   if _line.action == "won" or _line.action == "dead" then
-    insert(line.action,_line.x,_line.y)
+    insert(_line.action,_line.x,_line.y)
     break
   end
 
   if _line.action == "pickup_item" then
-    insert(line.content,_line.x,_line.y)
+    insert(_line.content,_line.x,_line.y)
   end 
 
   if _line.action == "attack_monster" or _line.action == "potential_danger" or _line.action == "safe"then
-    insert(line.action,_line.x,_line.y)
+    insert(_line.action,_line.x,_line.y)
   end  
 
 end
