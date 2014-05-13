@@ -4,7 +4,7 @@ seq = {}
 path = "../logs/vis.log"
 
 --for a_star:
-map = read_map("../data/map.txt") 
+local _map = read_map("../data/map.txt") 
 link_x = 22
 link_y = 39
 
@@ -43,20 +43,29 @@ function dist(a,b)
 end
 
 function flat(x,y)
-  return (x-1)*42 + (y-1)
+  return (x)*42 + (y)
 end
 
 function unflat(v)
   return math.floor(v/42),v%42
 end
 
+function validate_create(a,b)
+  if a<42 and a>0 and b>0 and b<42 then
+    if _map[a][b] == 1 and not exists(_items,"hole",a,b) and not exists(_items,"monster",a,b) then
+      return true
+    end
+  end
+  return false
+end
+
 function neighbors_create(n)
   local n1,n2 = unflat(n)
   local r = {}
-  table.insert(r,flat(n1,n2+1))
-  table.insert(r,flat(n1,n2-1))
-  table.insert(r,flat(n1+1,n2))
-  table.insert(r,flat(n1-1,n2))
+  if validate_create(n1,n2+1) then table.insert(r,flat(n1,n2+1)) end
+  if validate_create(n1,n2-1) then table.insert(r,flat(n1,n2-1)) end
+  if validate_create(n1+1,n2) then table.insert(r,flat(n1+1,n2)) end
+  if validate_create(n1-1,n2) then table.insert(r,flat(n1-1,n2)) end
   return r
 end
 
@@ -114,7 +123,7 @@ end
 function reconstruct_path(came_from, current_node)
     if exists_flat(came_from,current_node) then
         reconstruct_path(came_from, came_from[current_node])
-        --return (p + current_node)
+        insert("move",unflat(current_node))
     else
         insert("move",unflat(current_node))
     end
@@ -135,9 +144,7 @@ for line in io.lines(path) do
 
   if _line.action == "actual_danger" or _line.action == "item" then
     insert(_line.content,_line.x,_line.y)
-    if _line.content == "vortex" then
-      table.insert(_items,{"vortex",_line.x,_line.y})
-    end
+    table.insert(_items,{_line.content,_line.x,_line.y})
   end
 
   if _line.action == "won" or _line.action == "dead" then

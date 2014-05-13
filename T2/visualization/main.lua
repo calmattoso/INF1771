@@ -62,7 +62,7 @@ loadtiles(t)
  link.h = 33
  link.anim = {}
  link.anim = anims.baixo
-
+ way = 3
     
     ----utils----
     T = 0
@@ -112,16 +112,19 @@ function love.update(dt)
 TEsound.cleanup()
 end
 
-function get_way(x,y)
-  if x == link.x then
-    if y > link.y then 
+function get_way(y,x)
+  lx = link.x/t
+  ly = link.y/t
+  print(x,y,lx,ly)
+  if x == lx then
+    if y > ly then 
       return 3
     else 
       return 1
     end
   end
-  if y == link.y then
-    if x > link.x then 
+  if y == ly then
+    if x > lx then 
       return 2
     else 
       return 4
@@ -209,6 +212,7 @@ end
 
 
 function move(way)
+  print("link",way)
   if way == 1 then link.y = link.y - t;link.anim = anims.cima end
   if way == 2 then link.x = link.x + t;link.anim = anims.dir end
   if way == 3 then link.y = link.y + t;link.anim = anims.baixo end
