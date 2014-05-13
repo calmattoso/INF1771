@@ -21,7 +21,8 @@ header = [[
  	  	get_adjacent_list/3,
  	  	sensed/2,
  	  	on_vortex/0,
- 	  	check_local/0
+ 	  	check_local/0,
+ 	  	should_visit/1
  	  ]).
 
 	:- dynamic 
@@ -31,7 +32,8 @@ header = [[
 		energy/2,
 		sensed/2,
 		on_vortex/0,
-		has_won/0.
+		has_won/0,
+		should_visit/1.
 
 % ------------------------------------------------------------------------------
 %
@@ -75,6 +77,10 @@ header = [[
 
 		check_local :-
 			at( agent , Pos ),
+			(	
+				(findall( AdjPos , (get_adjacent( _ , AdjPos , Pos )), L ),
+				 should_visit_adjacent(L)); true
+			),
 			( update_danger_inferences( 
 					Pos , vortex , actual_vortex , potencial_vortex
 				);
@@ -198,6 +204,14 @@ header = [[
 				( retract(at(PotencialDanger , Head)) ,
 					assertz(at(Danger , Head)) )
 			), iterate_adjacent_list( PotencialDanger, Danger, Tail),!.
+
+		should_visit_adjacent([]).
+		should_visit_adjacent( [Head|Tail] ) :-
+			((not( should_visit(Head) ),
+				not( visited(Head)),
+			  asserta( should_visit(Head) ));true),
+			should_visit_adjacent( Tail ),!.
+
 
 	% ----------------------------------------------------------------------------
 	%  Description

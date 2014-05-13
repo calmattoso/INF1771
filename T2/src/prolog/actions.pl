@@ -48,9 +48,10 @@
 	% ----------------------------------------------------------------------------
 
 		best_action( pickup_item( Item , X , Y ) ) :-
-			item( Item ),
 			at( agent , pos(X , Y) ) ,
-			at( Item , pos(X , Y) ).
+			item( Item ),
+				at( Item , pos(X , Y) ),
+				Item \= heart.
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -74,20 +75,21 @@
 		best_action( move( ToX , ToY ) ) :-
 			on_vortex,
 			pos( ToX , ToY ),
-			at( agent , PosFrom ),
-			get_random_position( PosFrom , pos(ToX,ToY) ).
+			at( agent , pos(FromX,FromY) ),
+			check_complete_sensing(FromX,FromY),
+			get_random_position( pos(FromX,FromY) , pos(ToX,ToY) ).
 
 
 	% ----------------------------------------------------------------------------
 	%  Description
 	%    The 5th best action is to move to a heart, if the agent`s energy is so 
-	%		   low (<=20) that it actually makes sense to go there.
+	%		   low (=<10) that it actually makes sense to go there.
 	% ----------------------------------------------------------------------------
 
 		best_action( move( ToX , ToY ) ) :-
 			pos( ToX , ToY ),
 			energy( agent , Energy ) , 
-				Energy =< 20,
+				Energy =< 10,
 			at( agent , pos(FromX , FromY) ),
 			at( heart , pos(ToX , ToY) ),
 				can_move( FromX , FromY , ToX , ToY),
@@ -102,12 +104,12 @@
 
 		best_action( move( ToX , ToY ) ) :-
 			at( agent , pos(FromX , FromY) ),
-			pos( ToX, ToY ),
-			is_adjacent(pos( ToX , ToY ), pos(FromX , FromY)),
-				not( visited( pos(ToX, ToY) )),
-				can_move( FromX , FromY , ToX , ToY),
 				check_complete_sensing(FromX,FromY),
-				safe( pos(ToX , ToY) ).
+			pos( ToX, ToY ),
+				safe( pos(ToX , ToY) ),
+				not( visited( pos(ToX, ToY) )),
+				is_adjacent(pos( ToX , ToY ), pos(FromX , FromY)),
+				can_move( FromX , FromY , ToX , ToY).
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -117,11 +119,11 @@
 
 		best_action( move( ToX , ToY ) ) :-
 			at( agent , pos(FromX , FromY) ),
-				pos( ToX , ToY ),
-				not( visited( pos(ToX, ToY) )),
-				can_move( FromX , FromY , ToX , ToY),
 				check_complete_sensing(FromX,FromY),
-				safe( pos(ToX , ToY) ).
+			pos( ToX , ToY ),
+				safe( pos(ToX , ToY) ),
+				not( visited( pos(ToX, ToY) )),
+				can_move( FromX , FromY , ToX , ToY).
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -131,13 +133,13 @@
 	% ----------------------------------------------------------------------------
 
 		best_action( attack_monster( X , Y ) ) :-
+			energy( agent , Energy ) , 
+				Energy >= 11,
 			at( agent , pos(Xg , Yg) ),
 				check_complete_sensing(Xg,Yg),
-				is_adjacent(pos(Xg,Yg), pos(X,Y)),
 			(at(actual_monster , pos(X,Y));
-			 at(potential_monster , pos(X,Y)) ),
-			energy( agent , Energy ) , 
-				Energy > 10.
+			 at(potential_monster , pos(X,Y))),
+				is_adjacent(pos(Xg,Yg), pos(X,Y)),!.
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -149,34 +151,38 @@
 
 		% Move next to where we strongly believe there`s a monster
 			best_action( move( ToX , ToY ) ) :-
-				pos( Mx , My ),
-					at( actual_monster, pos(Mx,My)),
+				at( agent , pos(FromX , FromY)),
+				at( actual_monster, pos(Mx,My)),!,
 				pos( ToX , ToY ),
 					is_adjacent( pos(ToX,ToY), pos(Mx,My)),
-					safe( pos(ToX , ToY) ),
-				at( agent , pos(FromX , FromY)),
+					safe( pos(ToX , ToY) ),!,
 					can_move( FromX , FromY , ToX , ToY),
 					check_complete_sensing(FromX,FromY).
 
 		% Move next to where we think there might be a monster
 			best_action( move( ToX , ToY ) ) :-
-				pos( Mx , My ),
-					at( potential_monster, pos(Mx,My)),
+				at( agent , pos(FromX , FromY)),
+				at( potential_monster, pos(Mx,My)),!,
 				pos( ToX , ToY ),
 					is_adjacent( pos(ToX,ToY), pos(Mx,My)),
-					safe( pos(ToX , ToY) ),
-				at( agent , pos(FromX , FromY)),
+					safe( pos(ToX , ToY) ),!,
 					can_move( FromX , FromY , ToX , ToY),
 					check_complete_sensing(FromX,FromY).
 
 		% Move to a vortex. gg
 			best_action( move( Dx , Dy ) ) :-
-				pos( Dx , Dy ),
-					( at( potential_vortex, pos(Dx,Dy));
-						at( actual_vortex, pos(Dx,Dy))),
+				( at( potential_vortex, pos(Dx,Dy)),!;
+					at( actual_vortex, pos(Dx,Dy)),!),
 				at( agent , pos(FromX , FromY)),
 					can_move( FromX , FromY , Dx , Dy),
 					check_complete_sensing(FromX,FromY).
+
+		% Move to some pending position
+			best_action( move( ToX , ToY ) ) :-
+				at( agent , pos(FromX , FromY)),
+				check_complete_sensing(FromX,FromY),
+				should_visit( pos(ToX,ToY) ).
+
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -191,10 +197,10 @@
 
 		move( ToX , ToY ) :-
 			at( agent, pos(FromX , FromY) ),
-			can_move( FromX , FromY , ToX , ToY ),
 				retract( at( agent , pos(FromX , FromY) )),
 				asserta( at( agent , pos(ToX, ToY) )),
-				assertz( visited( pos(ToX , ToY) )).
+				assertz( visited( pos(ToX , ToY) )),
+				retract( should_visit(pos( ToX , ToY)) ).
 
 	% ----------------------------------------------------------------------------
 	%  Description
@@ -234,25 +240,27 @@
 			attack_monster( X , Y ) :-
 				at( agent   , pos(Xg , Yg) ),
 				at( actual_monster , pos(X,Y) ),
-				is_adjacent(pos(Xg,Yg), pos(X,Y)),
+				is_adjacent(pos(Xg,Yg), pos(X,Y)),!,
 					retract( at( actual_monster, pos(X,Y) )),
-					asserta( safe( pos(X,Y))),
+					(retract( at( potential_monster, pos(X,Y) )); true),
+					((no_dangers(pos(X,Y)) , asserta( safe( pos(X,Y))) );true),
 					((at(monster,pos(X,Y)),
 						retract( at( monster, pos(X,Y)))); 
 					true),
-				sub_energy( 10 ).
+				!,sub_energy( 10 ),!.
 
 		% Weak belief of potential monster at (X,Y)
 			attack_monster( X , Y ) :-
 				at( agent   , pos(Xg , Yg) ),
 				at( potential_monster , pos(X,Y) ),
-				is_adjacent(pos(Xg,Yg), pos(X,Y)),
+				is_adjacent(pos(Xg,Yg), pos(X,Y)),!,
 					retract( at( potential_monster, pos(X,Y) )),
-					asserta( safe( pos(X,Y))),
+					(retract( at( actual_monster, pos(X,Y) )); true),
+					((no_dangers(pos(X,Y)) , asserta( safe( pos(X,Y))) );true),
 					((at(monster,pos(X,Y)),
 						retract( at( monster, pos(X,Y)))); 
 					true),
-				sub_energy( 10 ).
+				!,sub_energy( 10 ),!.
 
 % ------------------------------------------------------------------------------
 %
@@ -307,3 +315,12 @@
 			random( 1, 43, Y),
 			(pos(X,Y), pos(X,Y) \= Except, To = pos(X,Y), !);
 			get_random_position( Except , To ).
+
+		no_dangers( Pos ) :-
+			not( at(actual_monster, Pos ) ),
+			not( at(actual_vortex, Pos ) ),
+			not( at(actual_hole, Pos ) ),
+			not( at(potential_monster, Pos ) ),
+			not( at(potential_vortex, Pos ) ),
+			not( at(potential_hole, Pos ) ).
+
