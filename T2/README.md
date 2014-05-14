@@ -43,12 +43,19 @@ Instruções de Uso [ Prolog ]
 Instruções de Uso [ Visualização ]
 ----------------------------------
   
-  TODO
+  1) Assumindo que os passos foram feitos, haverá um viz.log em logs/ 
+  Caso você não tenha gerado, existe um para demonstração. 
+  Para executar a visualização, va na raiz:
+
+    cd visualization/
+    love .
+
+
 
 Contato
 -------
 
   Carlos Mattoso  [ 1210553 ]
     calmattoso _at_ hotmail _dot_ com
-  Leonardo Kaplan [ TODO ]
+  Leonardo Kaplan [ 1212509 ]
     contato _dot_ leonardokaplan _at_ gmail _dot_ com
