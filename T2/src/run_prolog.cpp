@@ -19,7 +19,7 @@ void check_danger(string dangerCode , ofstream& log);
 int main( )
 {
   char * argv[] = {
-    "libswipl.dll",
+    "swipl.dll",
     "-s", "..\\src\\prolog\\run.pl",
     "-q",
     NULL
@@ -144,7 +144,7 @@ int main( )
       {
         if( gone_wrong )
         {
-          cout << "Something has gone terribly wrong...\n";
+          cout << "Something has gone terribly wrong... :(\n";
           break;
         }
 

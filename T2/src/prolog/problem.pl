@@ -77,8 +77,15 @@
 		check_local :-
 			at( agent , Pos ),
 			(	
-				(findall( AdjPos , (get_adjacent( _ , AdjPos , Pos )), L ),
-				 should_visit_adjacent(L)); true
+				get_adjacent( _ , AdjPos , Pos ),
+				(
+					(
+					  not( should_visit( AdjPos ) ),
+					  not( visited(AdjPos) ),
+				    asserta( should_visit(AdjPos) )
+				  );
+				  true
+				)
 			),
 			( update_danger_inferences( 
 					Pos , vortex , actual_vortex , potencial_vortex
@@ -202,14 +209,7 @@
 					assertz(at(PotencialDanger , Head)) );
 				( retract(at(PotencialDanger , Head)) ,
 					assertz(at(Danger , Head)) )
-			), iterate_adjacent_list( PotencialDanger, Danger, Tail),!.
-
-		should_visit_adjacent([]).
-		should_visit_adjacent( [Head|Tail] ) :-
-			((not( should_visit(Head) ),
-				not( visited(Head)),
-			  asserta( should_visit(Head) ));true),
-			should_visit_adjacent( Tail ),!.
+			), iterate_adjacent_list( PotencialDanger, Danger, Tail),!.			
 
 
 	% ----------------------------------------------------------------------------
