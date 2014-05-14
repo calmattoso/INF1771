@@ -16,7 +16,7 @@ set<string> entitySet;
   
   /* Helpers */
     string getEntityString( char code );
-    void addWarnings( char code , uint32_t col , uint32_t line );
+    void addWarnings( char code , unsigned int col , unsigned int line );
 
   /* Input parser */
     bool read_map(string path);
@@ -67,7 +67,7 @@ int main()
 
       if (mapFile.is_open())
       {
-        uint32_t l = 1, c = 1;
+        unsigned int l = 1, c = 1;
 
         while ( getline (mapFile,line) &&
                 l >= 1 && l <= 42 )
@@ -77,7 +77,7 @@ int main()
 
           /* For each read char of a given line */
           for(
-            uint8_t k = 0, len = line.size(); 
+            int k = 0, len = line.size(); 
             k < len && c >= 1 && c <= 42 ; 
             ++k
           )
@@ -124,7 +124,7 @@ int main()
 
         while( getline(itemsFile , line) )
         {
-          uint32_t l, c;
+          unsigned int l, c;
           char entityCode[3];
           stringstream output;
 
@@ -233,12 +233,12 @@ int main()
 
   /* Add warnings to the entity set in positions around a monster, vortex or
        a hole. */
-  void addWarnings( char code , uint32_t col , uint32_t line )
+  void addWarnings( char code , unsigned int col , unsigned int line )
   {
     string warning = "";
     stringstream output;
 
-    int32_t offsets[ 4 ][ 2 ] = {
+    int offsets[ 4 ][ 2 ] = {
       { 1,  0}, /* east  */
       {-1,  0}, /* west  */
       { 0,  1}, /* south */
@@ -267,7 +267,7 @@ int main()
     /* Now insert warnings on valid positions into the entity set */
       for( int i = 0; i < 4; i++ )    
       {
-        uint32_t col_offset  = offsets[i][ 0 ],
+        int col_offset  = offsets[i][ 0 ],
                  line_offset = offsets[i][ 1 ] ;
         stringstream output;
 
