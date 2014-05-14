@@ -105,8 +105,7 @@
 		best_action( move( ToX , ToY ) ) :-
 			at( agent , pos(FromX , FromY) ),
 				check_complete_sensing(FromX,FromY),
-			pos( ToX, ToY ),
-				safe( pos(ToX , ToY) ),
+			safe( pos(ToX , ToY) ),
 				not( visited( pos(ToX, ToY) )),
 				is_adjacent(pos( ToX , ToY ), pos(FromX , FromY)),
 				can_move( FromX , FromY , ToX , ToY).
@@ -120,8 +119,7 @@
 		best_action( move( ToX , ToY ) ) :-
 			at( agent , pos(FromX , FromY) ),
 				check_complete_sensing(FromX,FromY),
-			pos( ToX , ToY ),
-				safe( pos(ToX , ToY) ),
+			safe( pos(ToX , ToY) ),
 				not( visited( pos(ToX, ToY) )),
 				can_move( FromX , FromY , ToX , ToY).
 
@@ -134,7 +132,7 @@
 
 		best_action( attack_monster( X , Y ) ) :-
 			energy( agent , Energy ) , 
-				Energy >= 11,
+				Energy > 10,
 			at( agent , pos(Xg , Yg) ),
 				check_complete_sensing(Xg,Yg),
 			(at(actual_monster , pos(X,Y));
@@ -152,10 +150,11 @@
 		% Move next to where we believe there`s a monster
 			best_action( move( ToX , ToY ) ) :-
 				at( agent , pos(FromX , FromY)),
-				(at( actual_monster, pos(Mx,My)),!;
-				at( potential_monster, pos(Mx,My)),!),
-				pos( ToX , ToY ),
-					is_adjacent( pos(ToX,ToY), pos(Mx,My)),
+				(
+					at( actual_monster, pos(Mx,My)),!;
+				 	at( potential_monster, pos(Mx,My)),!
+				),
+				get_adjacent( _ , pos(ToX,ToY), pos(Mx,My) ),
 					visited( pos(ToX , ToY) ),!,
 					can_move( FromX , FromY , ToX , ToY),
 					check_complete_sensing(FromX,FromY).
@@ -165,7 +164,7 @@
 				( at( potential_vortex, pos(Dx,Dy)),!;
 					at( actual_vortex, pos(Dx,Dy)),!),
 				at( agent , pos(FromX , FromY)),
-					can_move( FromX , FromY , Dx , Dy),
+					can_move( FromX , FromY , Dx , Dy ),
 					check_complete_sensing(FromX,FromY).
 
 		% Move to some pending position
