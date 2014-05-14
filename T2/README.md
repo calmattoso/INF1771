@@ -40,6 +40,10 @@ Instruções de Uso [ Prolog ]
        instalado no `Path` apresentado em sala de aula, isto é:
        "C:\Program Files (x86)\swipl\".
 
+  São fornecidos os arquivos `src\problem_end.pl` e o respectivo log da execução
+    do prolog ( `logs/prolog_end.pl` ), para exibir um caso em que nosso prolog
+    resolveu o problema apresentado.
+
 Instruções de Uso [ Visualização ]
 ----------------------------------
   

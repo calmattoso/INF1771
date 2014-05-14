@@ -1,0 +1,119 @@
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = mark_unsafe
+mark_unsafe.
+best_action(X)
+  X = attack_monster(21,37)
+attack_monster(21,37).
+best_action(X)
+  X = move(21,37)
+move(21,37).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = adjust_safe
+adjust_safe.
+best_action(X)
+  X = move(22,37)
+move(22,37).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = adjust_safe
+adjust_safe.
+best_action(X)
+  X = move(22,38)
+move(22,38).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = mark_unsafe
+mark_unsafe.
+best_action(X)
+  X = move(20,37)
+move(20,37).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = adjust_safe
+adjust_safe.
+best_action(X)
+  X = move(20,38)
+move(20,38).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = mark_unsafe
+mark_unsafe.
+best_action(X)
+  X = move(22,38)
+move(22,38).
+best_action(X)
+  X = attack_monster(22,39)
+attack_monster(22,39).
+best_action(X)
+  X = move(22,39)
+move(22,39).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = mark_unsafe
+mark_unsafe.
+best_action(X)
+  X = attack_monster(21,39)
+attack_monster(21,39).
+best_action(X)
+  X = move(21,39)
+move(21,39).
+sense(X)
+  X = check_local
+check_local.
+sense(X)
+  X = mark_unsafe
+mark_unsafe.
+best_action(X)
+  X = attack_monster(21,40)
+attack_monster(21,40).
+best_action(X)
+  X = attack_monster(20,39)
+attack_monster(20,39).
+best_action(X)
+  X = move(22,37)
+move(22,37).
+best_action(X)
+  X = attack_monster(22,38)
+attack_monster(22,38).
+best_action(X)
+  X = move(20,37)
+move(20,37).
+best_action(X)
+  X = attack_monster(20,38)
+attack_monster(20,38).
+best_action(X)
+  X = move(22,39)
+move(22,39).
+best_action(X)
+  X = attack_monster(22,40)
+attack_monster(22,40).
+best_action(X)
+  X = move(22,40)
+move(22,40).
+sense(X)
+  X = assertz(at(sword,pos(22,40)))
+assertz(at(sword,pos(22,40))).
+best_action(X)
+  X = pickup_item(sword,22,40)
+pickup_item(sword,22,40).
+sense(X)
+  X = asserta(has_won)
+asserta(has_won).
+best_action(X)
+  X = won
