@@ -1,12 +1,8 @@
-require("readmap")
+require("search")
 
 seq = {}
 path = "../logs/vis.log"
 
---for a_star:
-local _map = read_map("../data/map.txt") 
-link_x = 22
-link_y = 39
 
 function parse(line)
   local _line = {}
@@ -14,14 +10,7 @@ function parse(line)
   return _line
 end
 
-function exists( table, action,x,y )
-  for _,e in pairs(table) do
-    if e.action == action and e.x == x and e.y == y then
-      return true
-    end
-  end
-  return false
-end
+
 
 function insert( action, x, y )
   --http://www.lua.org/pil/13.1.html
@@ -34,100 +23,7 @@ function insert( action, x, y )
   end
 end
 
-function dist(a,b)
-  local x1,y1 = unflat(a)
-  local x2,y2 = unflat(b)
-  sqx = (x1-x2) * (x1-x2)
-  sqy = (y1-y2) * (y1-y2)
-  return math.sqrt( sqx + sqy )
-end
 
-function flat(x,y)
-  return (x)*42 + (y)
-end
-
-function unflat(v)
-  return math.floor(v/42),v%42
-end
-
-function validate_create(a,b)
-  if a<42 and a>0 and b>0 and b<42 then
-    if _map[a][b] == 1 and not exists(_items,"hole",a,b) and not exists(_items,"monster",a,b) then
-      return true
-    end
-  end
-  return false
-end
-
-function neighbors_create(n)
-  local n1,n2 = unflat(n)
-  local r = {}
-  if validate_create(n1,n2+1) then table.insert(r,flat(n1,n2+1)) end
-  if validate_create(n1,n2-1) then table.insert(r,flat(n1,n2-1)) end
-  if validate_create(n1+1,n2) then table.insert(r,flat(n1+1,n2)) end
-  if validate_create(n1-1,n2) then table.insert(r,flat(n1-1,n2)) end
-  return r
-end
-
-function exists_flat(table,n)
-  for k,v in pairs(table) do
-    if v == n then return true end
-  end
-  return false
-end
-
-function search(table,n )
-  for k,v in pairs(table) do
-    if v == n then return k end
-  end
-end
-
-function a_star(dst_x,dst_y)
-  local pos = flat(link_x,link_y)
-  local goal = flat(dst_x,dst_y)
-  closedset = {}
-  openset = {}
-  table.insert(openset,pos)
-  came_from = {}
-  g = {}
-  g[pos] = 0
-  f = {}
-  f[pos] = g[pos] + dist(pos,goal)
-  while #openset ~= 0 do
-    table.sort( openset, function(a,b) return f[a]<f[b] end )
-    if openset[1] == goal then
-      reconstruct_path(came_from,goal)
-      break
-    end
-    current = openset[1]
-    table.insert(closedset,current)
-    table.remove(openset,search(openset,current))
-    neighbors = neighbors_create(current)
-    for _,neighbor in pairs(neighbors) do
-            if not exists_flat(closedset,neighbor) then
-              t_g = g[current] + dist(current,neighbor)
-              if not exists_flat(openset,neighbor) or t_g < g[neighbor] then
-                  came_from[neighbor] = current
-                  g[neighbor] = t_g
-                  f[neighbor] = g[neighbor] + dist(neighbor, goal)
-                  if not exists_flat(openset,neighbor) then
-                      table.insert(openset,neighbor)
-                  end
-              end
-            end
-    end
-  end
-  return false
-end
-   
-function reconstruct_path(came_from, current_node)
-    if exists_flat(came_from,current_node) then
-        reconstruct_path(came_from, came_from[current_node])
-        insert("move",unflat(current_node))
-    else
-        insert("move",unflat(current_node))
-    end
-end
 
 _items = {}
 
@@ -138,8 +34,13 @@ for line in io.lines(path) do
     if exists(_items,"vortex",_line.x,_line.y) then
       insert("teleport",_line.x,_line.y)
     else  
-      a_star(_line.x,_line.y) 
+      print(string.format("(%d,%d)->(%d,%d)",link_x,link_y,_line.x,_line.y))
+      --a_star(_line.x,_line.y) 
+      bfs(_line.x,_line.y)
+      --insert("move",_line.x,_line.y)
     end
+    link_x = _line.x
+    link_y = _line.y
   end
 
   if _line.action == "actual_danger" or _line.action == "item" then
@@ -161,9 +62,6 @@ for line in io.lines(path) do
   end  
 
 end
-
-
-
 
 --[[ 
 

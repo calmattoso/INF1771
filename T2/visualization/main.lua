@@ -51,7 +51,6 @@ end
 link.initial_x = 22
 link.initial_y = 39
 
-
 loadtiles(t)
 
 ----link----
@@ -70,7 +69,7 @@ loadtiles(t)
     Sm = 1
     cost = 0
     energy = 100
-    step = 0.01
+    step = 0.2
     temp_step = step
     started = false
     press_text = false
@@ -141,12 +140,22 @@ function effect(item)
   elseif item == "heart" then
     cost = cost - 10
     energy = energy + 50
+    if energy > 100 then energy = 100 end
   elseif item == "sword" then
     cost = cost - 100
   end
 end
 
-function exists( table, action,x,y )
+function exists2( table, action,x,y )
+  for a,e in pairs(table) do
+    if e.action == action and e.x == x and e.y == y then
+      return a
+    end
+  end
+  return 1
+end
+
+function exists3( table, action,x,y )
   for a,e in pairs(table) do
     if e.action == action and e.x == x and e.y == y then
       return a
@@ -156,9 +165,11 @@ function exists( table, action,x,y )
 end
 
 function action(todo)
+  todo.x = todo.x 
+  todo.y = todo.y 
   if todo.action == "move" then   
     new_way = get_way(todo.x,todo.y)
-    if way ~= new_way then --TODO if turn 180 decrease 2
+    if way ~= new_way then 
       way = new_way
       cost = cost - 1
     end
@@ -170,11 +181,16 @@ function action(todo)
    link.y = todo.y
   end
   if todo.action == "monster" or todo.action == "vortex" or todo.action == "hole" then
+    todo.x,todo.y = todo.y,todo.x
     table.insert(dangers,todo)
   end 
   if todo.action == "rupee" or todo.action == "sword" or todo.action == "heart" then
-    pos = exists(items,todo.action,todo.x,todo.y)
+    todo.x,todo.y = todo.y,todo.x
+    pos = exists3(items,todo.action,todo.x,todo.y)
     if pos then 
+      temp_step = step
+      step = 2
+      TEsound.play(song_item)
       effect(todo.action)
       table.remove(items,pos)
     else
@@ -198,21 +214,22 @@ function action(todo)
 
   if todo.action == "attack_monster" then 
     --animacao de atacar(get_way(x,y))
+    new_way = get_way(todo.x,todo.y)
+    if way ~= new_way then 
+      way = new_way
+      cost = cost - 1
+    end
     energy = energy - 10
     cost = cost - 5
-    pos = exists(dangers,"monster",todo.x,todo.y)
+    pos = exists2(dangers,"monster",todo.x,todo.y)
     table.remove(dangers,pos)
   end
 end
---[[      temp_step = step
-      step = 2
-      TEsound.play(song_item)
-     --]]
+
 
 
 
 function move(way)
-  print("link",way)
   if way == 1 then link.y = link.y - t;link.anim = anims.cima end
   if way == 2 then link.x = link.x + t;link.anim = anims.dir end
   if way == 3 then link.y = link.y + t;link.anim = anims.baixo end
@@ -251,8 +268,8 @@ function love.draw()
   if started then
    love.graphics.draw(tilesetmap)
    draw_dangers()
-   draw_items()
    draw_link()
+   draw_items()
    love.graphics.draw(logo,(n+2)*t,5*t,0,0.01*t,0.01*t)
    love.graphics.print("cost: "..cost,(n+2)*t,15*t)
    love.graphics.print("energy: "..energy,100+(n+2)*t,15*t)
