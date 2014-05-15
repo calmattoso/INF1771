@@ -50,6 +50,7 @@ Instruções de Uso [ Visualização ]
     cd visualization/
     love .
 
+  Como o arquivo de entrada é bastante grande, talvez demore um tempo até o jogo carregar...
 
 
 Contato

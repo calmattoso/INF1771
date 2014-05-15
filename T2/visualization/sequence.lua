@@ -26,7 +26,6 @@ end
 
 
 _items = {}
-
 for line in io.lines(path) do 
   _line = parse(line)
   -- usar http://lua-users.org/wiki/SwitchStatement ?
@@ -34,7 +33,8 @@ for line in io.lines(path) do
     if exists(_items,"vortex",_line.x,_line.y) then
       insert("teleport",_line.x,_line.y)
     else  
-      print(string.format("(%d,%d)->(%d,%d)",link_x,link_y,_line.x,_line.y))
+      --print(string.format("(%d,%d)->(%d,%d)",link_x,link_y,_line.x,_line.y))
+      print("carregando...")
       --a_star(_line.x,_line.y) 
       bfs(_line.x,_line.y)
       --insert("move",_line.x,_line.y)

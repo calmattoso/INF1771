@@ -121,7 +121,7 @@ function reconstruct_path(came_from, current_node)
     if came_from[current_node] then
       reconstruct_path(came_from, came_from[current_node])
         insert("move",unflat(current_node))
-      print("move",unflat(current_node))
+      --print("move",unflat(current_node))
     end
 end
 

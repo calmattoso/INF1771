@@ -69,7 +69,7 @@ loadtiles(t)
     Sm = 1
     cost = 0
     energy = 100
-    step = 0.2
+    step = 0.02
     temp_step = step
     started = false
     press_text = false
@@ -114,7 +114,7 @@ end
 function get_way(y,x)
   lx = link.x/t
   ly = link.y/t
-  print(x,y,lx,ly)
+  --print(x,y,lx,ly)
   if x == lx then
     if y > ly then 
       return 3
@@ -152,7 +152,7 @@ function exists2( table, action,x,y )
       return a
     end
   end
-  return 1
+  return false
 end
 
 function exists3( table, action,x,y )
@@ -221,8 +221,8 @@ function action(todo)
     end
     energy = energy - 10
     cost = cost - 5
-    pos = exists2(dangers,"monster",todo.x,todo.y)
-    table.remove(dangers,pos)
+    pos = exists2(dangers,"monster",todo.y,todo.x)
+    if pos then table.remove(dangers,pos) end
   end
 end
 
