@@ -179,11 +179,11 @@ void adjust_string(string& str, string hint)
 
   /* Game Won */
     else if( str == "won" )
-      str = "won(void,void,void)";
+      str = "won(void,1,1)";
 
   /* Game Lost */
     else if( str == "like_omg_dead")
-      str = "dead(void,void,void)";
+      str = "dead(void,1,1)";
 }
 
 void check_danger(string dangerCode , ofstream& log)
