@@ -34,6 +34,10 @@ Instruções de Uso [ Prolog ]
        cd bin
        run_prolog_x86.exe
 
+    Ao fim da execução é gerado um log dos comandos executados em prolog salvo
+      em `logs/prolog.log`. ( O outro arquivo de log gerado é usado pela
+      visualização ).
+
   5) Os outros arquivos `Batch` fornecidos em `build/` podem ser usados para
        compilar o `parser` de input, assim como o executador do `Prolog`.
      Para tanto é utilizado o GCC, e espera-se que o SWI-Prolog encontre-se 
