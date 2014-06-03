@@ -77,45 +77,6 @@ function search_best(table, f )
   return mk
 end
 
-function a_star(dst_x,dst_y)
-  local pos = flat(link_x,link_y)
-  local goal = flat(dst_x,dst_y)
-  local closedset = {}
-  local openset = {}
-  local came_from = {}
-  local g = {}
-  local f = {}
-  table.insert(openset,pos)
-  g[pos] = 0
-  f[pos] = g[pos] + dist(pos,goal)
-
-  while #openset ~= 0 do
-    current = openset[search_best(openset,f)]
-    --if openset[current] then print(openset[current]) end
-    if current == goal then
-      reconstruct_path(came_from,goal)
-      --for k,v in pairs(came_from) do print(unflat(v))  end
-      return
-    end
-    table.insert(closedset,current)
-    table.remove(openset,search(openset,current))
-    neighbors = neighbors_create(current)
-    for _,neighbor in pairs(neighbors) do
-      if not exists_flat(closedset,neighbor) then
-        t_g = g[current] + dist(current,neighbor)
-          if not exists_flat(openset,neighbor) or t_g < g[neighbor] then
-            came_from[current] = neighbor
-            g[neighbor] = t_g
-            f[neighbor] = g[neighbor] + dist(neighbor, goal)
-            if not exists_flat(openset,neighbor) then
-              table.insert(openset,neighbor)
-            end
-          end
-      end
-    end
-  end
-end
-   
 function reconstruct_path(came_from, current_node)
     --if exists_flat(came_from,current_node) then
     if came_from[current_node] then
