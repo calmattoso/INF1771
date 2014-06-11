@@ -9,8 +9,9 @@ attributes = [
   'contour_area_ratio', 'rectangle_area_ratio', 'aspect_ratio',\
   'ellipse_angle', 'fixpt_depth', 'centroid_x' , 'centroid_y' , 'hu_moment_1',\
   'hu_moment_2', 'hu_moment_3', 'hu_moment_4', 'hu_moment_5', 'hu_moment_6',\
-  'hu_moment_7'
-]
+  'hu_moment_7', 'convex_hull_perimeter', 'ellipse_center_x',\
+  'ellipse_center_y', 'ellipse_major_axis', 'ellipse_minor_axis'
+]  
 
 data = list()  # Base for the Arff file
 data_temp = list()
@@ -67,16 +68,7 @@ for i in range(0, 35):
 temp.append('class')
 
 columns = temp
-# # print atributes.__len__()
-# print minz
-#print data
+
 arff.dump('../logs/dataset.arff', data, \
           relation = "handGestures", names = columns)
 
-
-#former way to extract
-# data_temp.append([max_width, max_height, max_perimeter, areaMax, max_angle, max_ratio, \
-#                                      max_majoraxis_ellipse, max_minoraxis_ellipse, max_angle_ellipse, \
-#                                      max_hu[0][0], max_hu[1][0], max_hu[2][0], \
-#                                      max_hu[3][0], max_hu[4][0], max_hu[5][0], \
-#                                      max_hu[6][0], j])
