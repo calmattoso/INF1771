@@ -1,0 +1,54 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.LibSVM -S 0 -K 1 -D 3 -G 0.0 -R 0.0 -N 0.5 -M 40.0 -C 1.0 -E 0.001 -P 0.1 -seed 1
+Relation:     handGestures
+Instances:    900
+Attributes:   666
+[list of attributes omitted]
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+LibSVM wrapper, original code by Yasser EL-Manzalawy (= WLSVM)
+
+Time taken to build model: 793.39 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         479               53.2222 %
+Incorrectly Classified Instances       421               46.7778 %
+Kappa statistic                          0.4738
+Mean absolute error                      0.104 
+Root mean squared error                  0.3224
+Relative absolute error                 52.625  %
+Root relative squared error            102.5914 %
+Total Number of Instances              900     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.55      0.06       0.534     0.55      0.542      0.745    0
+                 0.53      0.059      0.53      0.53      0.53       0.736    1
+                 0.58      0.061      0.542     0.58      0.56       0.759    2
+                 0.52      0.031      0.675     0.52      0.588      0.744    3
+                 0.55      0.035      0.663     0.55      0.601      0.758    4
+                 0.56      0.058      0.549     0.56      0.554      0.751    5
+                 0.56      0.058      0.549     0.56      0.554      0.751    6
+                 0.43      0.071      0.43      0.43      0.43       0.679    7
+                 0.51      0.094      0.405     0.51      0.451      0.708    8
+Weighted Avg.    0.532     0.058      0.542     0.532     0.535      0.737
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i   <-- classified as
+ 55  1  7  8  0  3 19  0  7 |  a = 0
+  2 53  3  0  5  5  0 29  3 |  b = 1
+  7  4 58  3  2  6  1  5 14 |  c = 2
+  6  1  2 52  0  9 21  0  9 |  d = 3
+  3 11  1  1 55  3  1 19  6 |  e = 4
+  2  2  8  4  4 56  0  1 23 |  f = 5
+ 16  0  7  8  0  4 56  1  8 |  g = 6
+  2 26  4  0 16  3  1 43  5 |  h = 7
+ 10  2 17  1  1 13  3  2 51 |  i = 8
+
