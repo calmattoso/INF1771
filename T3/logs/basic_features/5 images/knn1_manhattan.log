@@ -1,0 +1,125 @@
+=== Run information ===
+
+Scheme:weka.classifiers.lazy.IBk -K 1 -W 0 -A "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.ManhattanDistance -R first-last\""
+Relation:     handGestures
+Instances:    900
+Attributes:   71
+              contour_area_ratio0
+              rectangle_area_ratio0
+              aspect_ratio0
+              ellipse_angle0
+              centroid_x0
+              centroid_y0
+              hu_moment_10
+              hu_moment_20
+              hu_moment_30
+              hu_moment_40
+              hu_moment_50
+              hu_moment_60
+              hu_moment_70
+              convex_hull_perimeter0
+              contour_area_ratio1
+              rectangle_area_ratio1
+              aspect_ratio1
+              ellipse_angle1
+              centroid_x1
+              centroid_y1
+              hu_moment_11
+              hu_moment_21
+              hu_moment_31
+              hu_moment_41
+              hu_moment_51
+              hu_moment_61
+              hu_moment_71
+              convex_hull_perimeter1
+              contour_area_ratio2
+              rectangle_area_ratio2
+              aspect_ratio2
+              ellipse_angle2
+              centroid_x2
+              centroid_y2
+              hu_moment_12
+              hu_moment_22
+              hu_moment_32
+              hu_moment_42
+              hu_moment_52
+              hu_moment_62
+              hu_moment_72
+              convex_hull_perimeter2
+              contour_area_ratio3
+              rectangle_area_ratio3
+              aspect_ratio3
+              ellipse_angle3
+              centroid_x3
+              centroid_y3
+              hu_moment_13
+              hu_moment_23
+              hu_moment_33
+              hu_moment_43
+              hu_moment_53
+              hu_moment_63
+              hu_moment_73
+              convex_hull_perimeter3
+              contour_area_ratio4
+              rectangle_area_ratio4
+              aspect_ratio4
+              ellipse_angle4
+              centroid_x4
+              centroid_y4
+              hu_moment_14
+              hu_moment_24
+              hu_moment_34
+              hu_moment_44
+              hu_moment_54
+              hu_moment_64
+              hu_moment_74
+              convex_hull_perimeter4
+              class
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+IB1 instance-based classifier
+using 1 nearest neighbour(s) for classification
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         702               78      %
+Incorrectly Classified Instances       198               22      %
+Kappa statistic                          0.7525
+Mean absolute error                      0.0505
+Root mean squared error                  0.2199
+Relative absolute error                 25.5769 %
+Root relative squared error             69.9772 %
+Total Number of Instances              900     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.9       0.019      0.857     0.9       0.878      0.941    0
+                 0.86      0.023      0.827     0.86      0.843      0.919    1
+                 0.8       0.018      0.851     0.8       0.825      0.891    2
+                 0.72      0.021      0.809     0.72      0.762      0.849    3
+                 0.82      0.026      0.796     0.82      0.808      0.897    4
+                 0.72      0.045      0.667     0.72      0.692      0.838    5
+                 0.8       0.03       0.769     0.8       0.784      0.885    6
+                 0.73      0.026      0.777     0.73      0.753      0.852    7
+                 0.67      0.04       0.677     0.67      0.673      0.815    8
+Weighted Avg.    0.78      0.028      0.781     0.78      0.78       0.876
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i   <-- classified as
+ 90  0  1  3  0  3  2  0  1 |  a = 0
+  0 86  1  0  7  2  0  1  3 |  b = 1
+  2  2 80  0  2  3  3  3  5 |  c = 2
+  6  0  0 72  1 11  7  0  3 |  d = 3
+  0  5  0  0 82  4  0  9  0 |  e = 4
+  2  5  1  8  2 72  2  3  5 |  f = 5
+  4  0  1  3  0  3 80  0  9 |  g = 6
+  0  4  5  0  8  2  2 73  6 |  h = 7
+  1  2  5  3  1  8  8  5 67 |  i = 8

@@ -1,0 +1,55 @@
+=== Run information ===
+
+Scheme:weka.classifiers.lazy.IBk -K 1 -W 0 -E -A "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.EuclideanDistance -R first-last\""
+Relation:     handGestures
+Instances:    900
+Attributes:   491
+[list of attributes omitted]
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+IB1 instance-based classifier
+using 1 nearest neighbour(s) for classification
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         628               69.7778 %
+Incorrectly Classified Instances       272               30.2222 %
+Kappa statistic                          0.66  
+Mean absolute error                      0.0686
+Root mean squared error                  0.2577
+Relative absolute error                 34.7253 %
+Root relative squared error             82.0151 %
+Total Number of Instances              900     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.79      0.028      0.782     0.79      0.786      0.881    0
+                 0.72      0.034      0.727     0.72      0.724      0.843    1
+                 0.72      0.053      0.632     0.72      0.673      0.834    2
+                 0.73      0.029      0.76      0.73      0.745      0.851    3
+                 0.68      0.034      0.716     0.68      0.697      0.823    4
+                 0.68      0.068      0.557     0.68      0.613      0.806    5
+                 0.79      0.034      0.745     0.79      0.767      0.878    6
+                 0.67      0.02       0.807     0.67      0.732      0.825    7
+                 0.5       0.043      0.595     0.5       0.543      0.729    8
+Weighted Avg.    0.698     0.038      0.702     0.698     0.698      0.83 
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i   <-- classified as
+ 79  1  6  2  1  2  6  1  2 |  a = 0
+  1 72 10  0  8  3  0  2  4 |  b = 1
+  5  7 72  0  0  6  2  4  4 |  c = 2
+  5  0  4 73  1 11  4  0  2 |  d = 3
+  0  6  4  4 68 12  0  5  1 |  e = 4
+  3  4  4  7  6 68  2  1  5 |  f = 5
+  4  0  1  5  0  2 79  0  9 |  g = 6
+  0  6  4  1 10  3  2 67  7 |  h = 7
+  4  3  9  4  1 15 11  3 50 |  i = 8

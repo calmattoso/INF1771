@@ -1,0 +1,271 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.1 -M 2
+Relation:     handGestures
+Instances:    900
+Attributes:   141
+[list of attributes omitted]
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+ellipse_angle8 <= 85.448952
+|   convex_hull_perimeter7 <= 554.225401
+|   |   hu_moment_46 <= 0.000155
+|   |   |   hu_moment_40 <= 0.000097
+|   |   |   |   hu_moment_37 <= 0.001207
+|   |   |   |   |   contour_area_ratio7 <= 0.986373
+|   |   |   |   |   |   hu_moment_28 <= 0.000993: 0 (5.0/1.0)
+|   |   |   |   |   |   hu_moment_28 > 0.000993
+|   |   |   |   |   |   |   contour_area_ratio7 <= 0.810326: 0 (3.0/1.0)
+|   |   |   |   |   |   |   contour_area_ratio7 > 0.810326: 2 (57.0/3.0)
+|   |   |   |   |   contour_area_ratio7 > 0.986373: 6 (4.0/1.0)
+|   |   |   |   hu_moment_37 > 0.001207
+|   |   |   |   |   contour_area_ratio0 <= 0.735444: 3 (2.0/1.0)
+|   |   |   |   |   contour_area_ratio0 > 0.735444: 1 (3.0)
+|   |   |   hu_moment_40 > 0.000097
+|   |   |   |   contour_area_ratio0 <= 0.737122: 5 (2.0)
+|   |   |   |   contour_area_ratio0 > 0.737122: 3 (2.0/1.0)
+|   |   hu_moment_46 > 0.000155: 7 (4.0/1.0)
+|   convex_hull_perimeter7 > 554.225401
+|   |   centroid_y7 <= 110
+|   |   |   hu_moment_38 <= 0.000395
+|   |   |   |   hu_moment_45 <= 0.000031
+|   |   |   |   |   contour_area_ratio0 <= 0.63002: 5 (2.0/1.0)
+|   |   |   |   |   contour_area_ratio0 > 0.63002: 2 (6.0)
+|   |   |   |   hu_moment_45 > 0.000031: 7 (4.0)
+|   |   |   hu_moment_38 > 0.000395
+|   |   |   |   centroid_x9 <= 219: 3 (11.0/1.0)
+|   |   |   |   centroid_x9 > 219: 5 (7.0/1.0)
+|   |   centroid_y7 > 110
+|   |   |   contour_area_ratio7 <= 0.83869
+|   |   |   |   ellipse_angle7 <= 76.607857
+|   |   |   |   |   contour_area_ratio6 <= 0.612897: 7 (24.0)
+|   |   |   |   |   contour_area_ratio6 > 0.612897
+|   |   |   |   |   |   aspect_ratio0 <= 1.414685
+|   |   |   |   |   |   |   centroid_y8 <= 115
+|   |   |   |   |   |   |   |   centroid_y2 <= 110: 7 (3.0/1.0)
+|   |   |   |   |   |   |   |   centroid_y2 > 110: 8 (5.0)
+|   |   |   |   |   |   |   centroid_y8 > 115
+|   |   |   |   |   |   |   |   centroid_y2 <= 159
+|   |   |   |   |   |   |   |   |   ellipse_angle8 <= 14.354631
+|   |   |   |   |   |   |   |   |   |   hu_moment_38 <= 0.00044: 4 (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   hu_moment_38 > 0.00044
+|   |   |   |   |   |   |   |   |   |   |   centroid_x3 <= 177: 8 (4.0)
+|   |   |   |   |   |   |   |   |   |   |   centroid_x3 > 177: 5 (6.0/1.0)
+|   |   |   |   |   |   |   |   |   ellipse_angle8 > 14.354631
+|   |   |   |   |   |   |   |   |   |   hu_moment_21 <= 0.008979
+|   |   |   |   |   |   |   |   |   |   |   contour_area_ratio5 <= 0.793545
+|   |   |   |   |   |   |   |   |   |   |   |   centroid_y0 <= 99
+|   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_31 <= 0.000634: 7 (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_31 > 0.000634: 1 (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   centroid_y0 > 99
+|   |   |   |   |   |   |   |   |   |   |   |   |   aspect_ratio3 <= 1.663856
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_x7 <= 129: 5 (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_x7 > 129
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   convex_hull_perimeter8 <= 599.866513
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_30 <= 0.000787
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   convex_hull_perimeter2 <= 646.533144: 4 (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   convex_hull_perimeter2 > 646.533144: 1 (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_30 > 0.000787
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   aspect_ratio2 <= 0.983871: 5 (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   aspect_ratio2 > 0.983871: 2 (2.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   convex_hull_perimeter8 > 599.866513
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_y3 <= 156
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_24 <= 0.004601: 4 (65.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_24 > 0.004601
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   contour_area_ratio4 <= 0.659945: 7 (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   contour_area_ratio4 > 0.659945: 4 (16.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_y3 > 156: 7 (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   aspect_ratio3 > 1.663856: 7 (8.0)
+|   |   |   |   |   |   |   |   |   |   |   contour_area_ratio5 > 0.793545
+|   |   |   |   |   |   |   |   |   |   |   |   aspect_ratio8 <= 0.786046: 4 (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   aspect_ratio8 > 0.786046
+|   |   |   |   |   |   |   |   |   |   |   |   |   centroid_y3 <= 155: 1 (19.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   centroid_y3 > 155: 7 (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   hu_moment_21 > 0.008979: 7 (14.0/2.0)
+|   |   |   |   |   |   |   |   centroid_y2 > 159
+|   |   |   |   |   |   |   |   |   centroid_y1 <= 161: 7 (4.0)
+|   |   |   |   |   |   |   |   |   centroid_y1 > 161
+|   |   |   |   |   |   |   |   |   |   hu_moment_15 <= 0.181694: 8 (8.0)
+|   |   |   |   |   |   |   |   |   |   hu_moment_15 > 0.181694: 1 (3.0/1.0)
+|   |   |   |   |   |   aspect_ratio0 > 1.414685
+|   |   |   |   |   |   |   hu_moment_63 <= 0.000018
+|   |   |   |   |   |   |   |   ellipse_angle7 <= 37.356995: 8 (18.0/1.0)
+|   |   |   |   |   |   |   |   ellipse_angle7 > 37.356995
+|   |   |   |   |   |   |   |   |   hu_moment_43 <= 0.000052: 7 (11.0/1.0)
+|   |   |   |   |   |   |   |   |   hu_moment_43 > 0.000052: 4 (2.0/1.0)
+|   |   |   |   |   |   |   hu_moment_63 > 0.000018: 1 (2.0/1.0)
+|   |   |   |   ellipse_angle7 > 76.607857
+|   |   |   |   |   hu_moment_46 <= 0.000096
+|   |   |   |   |   |   centroid_y9 <= 141: 4 (4.0)
+|   |   |   |   |   |   centroid_y9 > 141
+|   |   |   |   |   |   |   hu_moment_36 <= 0.000439: 0 (6.0/1.0)
+|   |   |   |   |   |   |   hu_moment_36 > 0.000439: 5 (3.0)
+|   |   |   |   |   hu_moment_46 > 0.000096: 1 (2.0/1.0)
+|   |   |   contour_area_ratio7 > 0.83869
+|   |   |   |   centroid_y3 <= 157
+|   |   |   |   |   rectangle_area_ratio8 <= 0.916007
+|   |   |   |   |   |   convex_hull_perimeter7 <= 799.538055
+|   |   |   |   |   |   |   hu_moment_30 <= 0.000178: 5 (10.0)
+|   |   |   |   |   |   |   hu_moment_30 > 0.000178
+|   |   |   |   |   |   |   |   ellipse_angle9 <= 30.787315
+|   |   |   |   |   |   |   |   |   contour_area_ratio9 <= 0.865558: 1 (8.0/1.0)
+|   |   |   |   |   |   |   |   |   contour_area_ratio9 > 0.865558: 5 (13.0/1.0)
+|   |   |   |   |   |   |   |   ellipse_angle9 > 30.787315
+|   |   |   |   |   |   |   |   |   centroid_x9 <= 120: 2 (3.0)
+|   |   |   |   |   |   |   |   |   centroid_x9 > 120
+|   |   |   |   |   |   |   |   |   |   hu_moment_36 <= 0.000115: 2 (2.0/1.0)
+|   |   |   |   |   |   |   |   |   |   hu_moment_36 > 0.000115: 1 (53.0)
+|   |   |   |   |   |   convex_hull_perimeter7 > 799.538055: 4 (3.0)
+|   |   |   |   |   rectangle_area_ratio8 > 0.916007
+|   |   |   |   |   |   centroid_y7 <= 168: 8 (4.0/1.0)
+|   |   |   |   |   |   centroid_y7 > 168: 0 (2.0)
+|   |   |   |   centroid_y3 > 157
+|   |   |   |   |   rectangle_area_ratio7 <= 0.697663
+|   |   |   |   |   |   centroid_y4 <= 167
+|   |   |   |   |   |   |   hu_moment_43 <= 0.000039: 1 (3.0)
+|   |   |   |   |   |   |   hu_moment_43 > 0.000039: 4 (3.0)
+|   |   |   |   |   |   centroid_y4 > 167: 7 (3.0)
+|   |   |   |   |   rectangle_area_ratio7 > 0.697663
+|   |   |   |   |   |   centroid_y9 <= 168: 5 (2.0/1.0)
+|   |   |   |   |   |   centroid_y9 > 168: 2 (12.0)
+ellipse_angle8 > 85.448952
+|   contour_area_ratio2 <= 0.800139
+|   |   hu_moment_38 <= 0.001809
+|   |   |   hu_moment_18 <= 0.169015
+|   |   |   |   contour_area_ratio9 <= 0.837017: 3 (32.0/1.0)
+|   |   |   |   contour_area_ratio9 > 0.837017: 0 (3.0)
+|   |   |   hu_moment_18 > 0.169015
+|   |   |   |   convex_hull_perimeter0 <= 772.22689
+|   |   |   |   |   aspect_ratio9 <= 0.533847
+|   |   |   |   |   |   centroid_x7 <= 165: 6 (45.0/1.0)
+|   |   |   |   |   |   centroid_x7 > 165: 8 (3.0/1.0)
+|   |   |   |   |   aspect_ratio9 > 0.533847
+|   |   |   |   |   |   centroid_y4 <= 100
+|   |   |   |   |   |   |   ellipse_angle8 <= 139.940491: 6 (8.0)
+|   |   |   |   |   |   |   ellipse_angle8 > 139.940491
+|   |   |   |   |   |   |   |   hu_moment_42 <= 0.000073: 2 (4.0)
+|   |   |   |   |   |   |   |   hu_moment_42 > 0.000073
+|   |   |   |   |   |   |   |   |   centroid_y1 <= 107: 7 (3.0/1.0)
+|   |   |   |   |   |   |   |   |   centroid_y1 > 107: 3 (2.0)
+|   |   |   |   |   |   centroid_y4 > 100
+|   |   |   |   |   |   |   hu_moment_19 <= 0.193545
+|   |   |   |   |   |   |   |   centroid_x0 <= 120: 8 (6.0/1.0)
+|   |   |   |   |   |   |   |   centroid_x0 > 120
+|   |   |   |   |   |   |   |   |   rectangle_area_ratio5 <= 0.737875
+|   |   |   |   |   |   |   |   |   |   hu_moment_36 <= 0.001466
+|   |   |   |   |   |   |   |   |   |   |   hu_moment_42 <= 0.000058
+|   |   |   |   |   |   |   |   |   |   |   |   hu_moment_11 <= 0.174754: 3 (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   hu_moment_11 > 0.174754: 0 (15.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   hu_moment_42 > 0.000058: 3 (2.0/1.0)
+|   |   |   |   |   |   |   |   |   |   hu_moment_36 > 0.001466: 5 (2.0)
+|   |   |   |   |   |   |   |   |   rectangle_area_ratio5 > 0.737875
+|   |   |   |   |   |   |   |   |   |   hu_moment_10 <= 0.16763: 5 (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   hu_moment_10 > 0.16763
+|   |   |   |   |   |   |   |   |   |   |   rectangle_area_ratio5 <= 0.844179
+|   |   |   |   |   |   |   |   |   |   |   |   hu_moment_25 <= 0.001184: 6 (11.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   hu_moment_25 > 0.001184
+|   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_45 <= 0.000082
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_y1 <= 150
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_x8 <= 229: 3 (31.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_x8 > 229
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   contour_area_ratio0 <= 0.690521: 8 (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   contour_area_ratio0 > 0.690521
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_44 <= 0.000022: 6 (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_44 > 0.000022
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   rectangle_area_ratio4 <= 0.756517: 3 (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   rectangle_area_ratio4 > 0.756517: 5 (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   centroid_y1 > 150: 6 (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   hu_moment_45 > 0.000082: 6 (2.0)
+|   |   |   |   |   |   |   |   |   |   |   rectangle_area_ratio5 > 0.844179: 6 (11.0)
+|   |   |   |   |   |   |   hu_moment_19 > 0.193545
+|   |   |   |   |   |   |   |   centroid_y8 <= 116: 6 (3.0/1.0)
+|   |   |   |   |   |   |   |   centroid_y8 > 116: 8 (10.0)
+|   |   |   |   convex_hull_perimeter0 > 772.22689
+|   |   |   |   |   centroid_x6 <= 224
+|   |   |   |   |   |   hu_moment_39 <= 0.000125: 0 (2.0/1.0)
+|   |   |   |   |   |   hu_moment_39 > 0.000125
+|   |   |   |   |   |   |   aspect_ratio6 <= 0.492518: 6 (2.0/1.0)
+|   |   |   |   |   |   |   aspect_ratio6 > 0.492518
+|   |   |   |   |   |   |   |   centroid_y5 <= 108
+|   |   |   |   |   |   |   |   |   hu_moment_31 <= 0.001012: 3 (7.0)
+|   |   |   |   |   |   |   |   |   hu_moment_31 > 0.001012: 5 (2.0)
+|   |   |   |   |   |   |   |   centroid_y5 > 108: 5 (34.0/1.0)
+|   |   |   |   |   centroid_x6 > 224
+|   |   |   |   |   |   contour_area_ratio0 <= 0.614612: 6 (2.0/1.0)
+|   |   |   |   |   |   contour_area_ratio0 > 0.614612: 2 (3.0)
+|   |   hu_moment_38 > 0.001809
+|   |   |   hu_moment_18 <= 0.216474: 8 (20.0)
+|   |   |   hu_moment_18 > 0.216474
+|   |   |   |   centroid_y4 <= 133: 0 (2.0/1.0)
+|   |   |   |   centroid_y4 > 133: 6 (5.0)
+|   contour_area_ratio2 > 0.800139
+|   |   ellipse_angle9 <= 103.474014: 2 (7.0)
+|   |   ellipse_angle9 > 103.474014
+|   |   |   centroid_x2 <= 236
+|   |   |   |   hu_moment_33 <= 0.000072: 2 (2.0/1.0)
+|   |   |   |   hu_moment_33 > 0.000072
+|   |   |   |   |   centroid_x0 <= 128: 5 (3.0/1.0)
+|   |   |   |   |   centroid_x0 > 128: 0 (64.0)
+|   |   |   centroid_x2 > 236
+|   |   |   |   centroid_x7 <= 240
+|   |   |   |   |   centroid_y0 <= 156: 0 (2.0)
+|   |   |   |   |   centroid_y0 > 156: 6 (2.0)
+|   |   |   |   centroid_x7 > 240
+|   |   |   |   |   hu_moment_42 <= 0.000021
+|   |   |   |   |   |   hu_moment_22 <= 0.002962
+|   |   |   |   |   |   |   hu_moment_31 <= 0.000578: 8 (4.0/1.0)
+|   |   |   |   |   |   |   hu_moment_31 > 0.000578: 2 (4.0/1.0)
+|   |   |   |   |   |   hu_moment_22 > 0.002962: 3 (3.0)
+|   |   |   |   |   hu_moment_42 > 0.000021: 1 (2.0/1.0)
+
+Number of Leaves  :   106
+
+Size of the tree :  211
+
+
+Time taken to build model: 0.36 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         553               61.4444 %
+Incorrectly Classified Instances       347               38.5556 %
+Kappa statistic                          0.5663
+Mean absolute error                      0.0901
+Root mean squared error                  0.2807
+Relative absolute error                 45.5995 %
+Root relative squared error             89.3077 %
+Total Number of Instances              900     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.65      0.049      0.625     0.65      0.637      0.809    0
+                 0.65      0.043      0.657     0.65      0.653      0.827    1
+                 0.6       0.05       0.6       0.6       0.6        0.807    2
+                 0.66      0.049      0.629     0.66      0.644      0.821    3
+                 0.65      0.048      0.631     0.65      0.64       0.816    4
+                 0.49      0.055      0.527     0.49      0.508      0.728    5
+                 0.7       0.041      0.68      0.7       0.69       0.861    6
+                 0.62      0.048      0.62      0.62      0.62       0.804    7
+                 0.51      0.053      0.548     0.51      0.528      0.733    8
+Weighted Avg.    0.614     0.048      0.613     0.614     0.613      0.801
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i   <-- classified as
+ 65  0  9  9  1  3  7  0  6 |  a = 0
+  1 65  6  0 11  8  0  9  0 |  b = 1
+  9  6 60  1  2 10  3  4  5 |  c = 2
+  6  0  2 66  0  9 10  1  6 |  d = 3
+  2 12  1  1 65  3  1 12  3 |  e = 4
+  6  5  4 13  6 49  3  4 10 |  f = 5
+  6  1  6  7  1  3 70  0  6 |  g = 6
+  4  6  4  1 14  3  0 62  6 |  h = 7
+  5  4  8  7  3  5  9  8 51 |  i = 8
+

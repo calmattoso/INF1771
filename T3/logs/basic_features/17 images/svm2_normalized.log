@@ -1,0 +1,54 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.LibSVM -S 0 -K 1 -D 3 -G 0.0 -R 0.0 -N 0.5 -M 40.0 -C 1.0 -E 0.001 -P 0.1 -Z -seed 1
+Relation:     handGestures
+Instances:    900
+Attributes:   239
+[list of attributes omitted]
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+LibSVM wrapper, original code by Yasser EL-Manzalawy (= WLSVM)
+
+Time taken to build model: 2.35 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         351               39      %
+Incorrectly Classified Instances       549               61      %
+Kappa statistic                          0.3138
+Mean absolute error                      0.1356
+Root mean squared error                  0.3682
+Relative absolute error                 68.625  %
+Root relative squared error            117.1537 %
+Total Number of Instances              900     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.59      0.034      0.686     0.59      0.634      0.778    0
+                 0.47      0.02       0.746     0.47      0.577      0.725    1
+                 0.61      0.044      0.635     0.61      0.622      0.783    2
+                 0.75      0.198      0.322     0.75      0.45       0.776    3
+                 0.86      0.326      0.248     0.86      0.385      0.767    4
+                 0.09      0.055      0.17      0.09      0.118      0.518    5
+                 0.08      0.001      0.889     0.08      0.147      0.539    6
+                 0.04      0.006      0.444     0.04      0.073      0.517    7
+                 0.02      0.003      0.5       0.02      0.038      0.509    8
+Weighted Avg.    0.39      0.076      0.516     0.39      0.338      0.657
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i   <-- classified as
+ 59  0  6 19  6  9  0  0  1 |  a = 0
+  1 47  2  0 50  0  0  0  0 |  b = 1
+  6  4 61  1 21  7  0  0  0 |  c = 2
+  4  0  2 75 17  1  1  0  0 |  d = 3
+  0  2  1 10 86  0  0  1  0 |  e = 4
+  0  2  4 39 44  9  0  2  0 |  f = 5
+ 11  0  4 57  4 15  8  0  1 |  g = 6
+  0  7  5  1 83  0  0  4  0 |  h = 7
+  5  1 11 31 36 12  0  2  2 |  i = 8
+

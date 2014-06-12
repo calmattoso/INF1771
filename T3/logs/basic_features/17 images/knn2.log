@@ -1,0 +1,56 @@
+=== Run information ===
+
+Scheme:weka.classifiers.lazy.IBk -K 2 -W 0 -A "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.EuclideanDistance -R first-last\""
+Relation:     handGestures
+Instances:    900
+Attributes:   239
+[list of attributes omitted]
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+IB1 instance-based classifier
+using 2 nearest neighbour(s) for classification
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         634               70.4444 %
+Incorrectly Classified Instances       266               29.5556 %
+Kappa statistic                          0.6675
+Mean absolute error                      0.0675
+Root mean squared error                  0.2199
+Relative absolute error                 34.1782 %
+Root relative squared error             69.9702 %
+Total Number of Instances              900     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.8       0.024      0.808     0.8       0.804      0.896    0
+                 0.86      0.049      0.688     0.86      0.764      0.919    1
+                 0.8       0.04       0.714     0.8       0.755      0.917    2
+                 0.78      0.049      0.667     0.78      0.719      0.905    3
+                 0.73      0.063      0.593     0.73      0.655      0.896    4
+                 0.63      0.046      0.63      0.63      0.63       0.859    5
+                 0.7       0.031      0.737     0.7       0.718      0.909    6
+                 0.56      0.016      0.812     0.56      0.663      0.898    7
+                 0.48      0.015      0.8       0.48      0.6        0.822    8
+Weighted Avg.    0.704     0.037      0.717     0.704     0.701      0.891
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i   <-- classified as
+ 80  2  2  7  0  4  5  0  0 |  a = 0
+  0 86  2  1  6  1  0  1  3 |  b = 1
+  3  7 80  1  1  3  4  1  0 |  c = 2
+  9  0  4 78  1  5  2  0  1 |  d = 3
+  0 18  1  0 73  4  1  3  0 |  e = 4
+  2  4  2  9 13 63  2  2  3 |  f = 5
+  4  0  4 17  1  2 70  0  2 |  g = 6
+  0  4  6  0 27  3  1 56  3 |  h = 7
+  1  4 11  4  1 15 10  6 48 |  i = 8
+
